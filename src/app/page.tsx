@@ -26,12 +26,13 @@ export default async function Home() {
     )
   }*/
 
+  
+
 
   return (
     <>
-    
-    <ToasterProvider/>
-    <Auth/>
+      <ToasterProvider/>
+      <Auth/>
     </>
   );
 }
