@@ -114,3 +114,16 @@ model Movie{
   genre String
   duration String
 }
+
+model Country{
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  name String
+  region String?
+  religion String?
+  language String?
+  currency String?
+  description String?
+  weather String?
+  status String?
+  flagUrl String
+}

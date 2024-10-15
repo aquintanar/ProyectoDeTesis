@@ -19,7 +19,7 @@ export default  function Actividad(){
             <div className="flex flex-col justify-center">
                 <h1 className="text-3xl md:text-6xl text-[#037EF3] text-center">Que quieres hacer?</h1>
                 <div className="flex items-center justify-center gap-8 mt-10">
-                    <div onClick={()=>router.push('/gestion')}>
+                    <div onClick={()=>router.push('/GestionPaises')}>
                         <div className="group flex-row w-44 mx-auto">
                             <div className="
                                 w-44
