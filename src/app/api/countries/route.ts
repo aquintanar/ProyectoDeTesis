@@ -6,9 +6,21 @@ export async function POST(
     
 ){
     try{
+        console.log('HOLA')
+        
         const body = await req.json();
-
-        const {name,flagUrl} = body;
+        
+        const {
+            
+            name,
+            religion,
+            currency,
+            weather,
+            region,
+            language,
+            description,
+            continent,
+            flagUrl} = body;
 
         if(!name || !flagUrl){
             return new NextResponse("Missing fields",{status:400});
@@ -16,7 +28,14 @@ export async function POST(
 
         const country = await prisma.country.create({
             data:{
+                
                 name,
+                religion,
+                currency,
+                weather,
+                language,
+                description,
+                continent,
                 flagUrl
             }
         })

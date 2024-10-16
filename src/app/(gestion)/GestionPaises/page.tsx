@@ -1,4 +1,3 @@
-'use client'
 import { StickyWrapper } from "@/app/components/Stickywrapper";
 import getCurrentUser from "../../actions/getCurrentUser";
 import ClientOnly from "../../components/ClientOnly";
@@ -13,17 +12,31 @@ import Container from "@/app/components/Container";
 import getListings from "@/app/actions/getListings";
 import ListingCard from "@/app/components/listings/ListingCard";
 import AddButton from "@/app/components/AddButton";
+import prismadb from '@/app/libs/prismadb';
+import CountryCard from "./CountryCard";
 
-
-export default  function Gestion(){
-    
+export default  async function Gestion(){
+    const countries = await prismadb.country.findMany({
+        orderBy:{
+            name:'asc'
+        }
+    });
     
     
     return(
     
     <div className="flex flex-row-revers gap-[48px] px-6">
             
-            <Container>
+            <div
+        className="
+            w-full
+            mx-auto
+            xl:px-20
+            md:px-10
+            sm:px-2
+            px-4
+        "
+        > 
                 <div className="
                     pt-32
                     grid
@@ -39,23 +52,38 @@ export default  function Gestion(){
                 
 
                 </div>
+                <div className="
+                    pt-4
+                    grid
+                    grid-cols-1
+                    sm:grid-cols-2
+                    md:grid-cols-3
+                    lg:grid-cols-4
+                    xl:grid-cols-5
+                    2xl:grid-cols-6
+                    gap-8
+                    w-full
+                
+                ">
+                {countries.map((country:any)=>{
+                    return(
+                    <CountryCard
+                        key={country.id}
+                        data={country}
+                    />
+                    )
+
+                })}
+                </div>
+                
                 <AddButton
                     label={"Agregar Pais"}
                     href={"/GestionPaises/507f1f77bcf86cd799439011"}
                 
                 />
                
-            </Container>
+            </div>
             
     </div>
     )
 }
-/*
-<StickyWrapper>
-                 My sticky sidebar
-            </StickyWrapper>
-            <FeedWrapper>
-                <Header title ="Spanish"/>
-            </FeedWrapper>
-
-*/

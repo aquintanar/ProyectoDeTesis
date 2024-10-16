@@ -118,12 +118,12 @@ model Movie{
 model Country{
   id String @id @default(auto()) @map("_id") @db.ObjectId
   name String
-  region String?
-  religion String?
-  language String?
-  currency String?
-  description String?
-  weather String?
+  religion String
+  language String
+  currency String
+  description String
+  weather String
+  continent String
   status String?
   flagUrl String
 }
