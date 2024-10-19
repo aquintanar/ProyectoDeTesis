@@ -13,11 +13,10 @@ import getListings from "@/app/actions/getListings";
 import ListingCard from "@/app/components/listings/ListingCard";
 import AddButton from "@/app/components/AddButton";
 import prismadb from '@/app/libs/prismadb';
-import { Province } from "@prisma/client";
-import ProvinceCard from "./ProvinceCard";
+import CityCard from "./CityCard";
 
-export default  async function GestionProvincias(){
-    const provinces = await prismadb.province.findMany({
+export default  async function Gestion(){
+    const cities = await prismadb.city.findMany({
         orderBy:{
             name:'asc'
         }
@@ -66,11 +65,11 @@ export default  async function GestionProvincias(){
                     w-full
                 
                 ">
-                {provinces.map((province:any)=>{
+                {cities.map((city:any)=>{
                     return(
-                    <ProvinceCard
-                        key={province.id}
-                        data={province}
+                    <CityCard
+                        key={city.id}
+                        data={city}
                     />
                     )
 
@@ -78,8 +77,8 @@ export default  async function GestionProvincias(){
                 </div>
                 
                 <AddButton
-                    label={"Agregar Provincia"}
-                    href={"/GestionProvincias/507f1f77bcf86cd799439011"}
+                    label={"Agregar Ciudad"}
+                    href={"/GestionCiudades/507f1f77bcf86cd799439011"}
                 
                 />
                

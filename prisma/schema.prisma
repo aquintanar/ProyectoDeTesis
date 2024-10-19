@@ -126,4 +126,79 @@ model Country{
   continent String
   status String?
   flagUrl String
+
+  provinces Province[]
+}
+
+model Province{
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  name String
+  economicactivity String
+  surface Float
+  population Int
+  description String
+  imageUrl String
+  status String?
+  country_id String @db.ObjectId
+
+  
+  country Country @relation(fields: [country_id],references:[id],onDelete : Cascade)
+  cities City[]
+}
+
+
+model City{
+
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  name String
+  province_id String @db.ObjectId
+  description String
+  status String?
+  imageUrl String
+
+  province Province @relation(fields: [province_id],references:[id],onDelete : Cascade)
+}
+
+model Company{
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  name String
+  sector String
+  identification_type String
+  identification_number String
+  type_of_company String
+  description String
+  imageUrl String
+  webSite String?
+  status String?
+}
+model Ability{
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+ 
+  type String
+  area_of_ability String
+  description String
+  imageUrl String
+  status String?
+  name String
+}
+
+model Document{
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  name String
+  type String
+  description String
+  imageUrl String
+  status String?
+}
+
+model Proyect{
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  name String
+  ods String
+  description String
+  imageUrl String
+  status String?
+
 }

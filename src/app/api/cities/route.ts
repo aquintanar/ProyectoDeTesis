@@ -1,46 +1,37 @@
 import prisma from "@/app/libs/prismadb"
 import { NextResponse } from "next/server";
 
+
 export async function POST(
     req:Request,
     
 ){
     try{
-        console.log('HOLA')
+
         
         const body = await req.json();
         
         const {
             
             name,
-            religion,
-            currency,
-            weather,
-            region,
-            language,
             description,
-            continent,
-            flagUrl} = body;
+            imageUrl,
+            province,
+            } = body;
 
-        if(!name || !flagUrl){
-            return new NextResponse("Missing fields",{status:400});
-        }
+        
 
-        const country = await prisma.country.create({
+        const city = await prisma.city.create({
             data:{
                 
                 name,
-                religion,
-                currency,
-                weather,
-                language,
                 description,
-                continent,
-                flagUrl
+                imageUrl,
+                province,
             }
         })
         
-        return NextResponse.json(country);
+        return NextResponse.json(city);
     }
     catch(error){
         console.log(error);
@@ -55,13 +46,13 @@ export async function GET(
 ){
     try{
        
-        const country = await prisma.country.findMany   ({
+        const city = await prisma.city.findMany   ({
 
         })
         
 
-        console.log(country)
-        return NextResponse.json(country);
+        
+        return NextResponse.json(city);
     }
     catch(error){
         console.log(error);

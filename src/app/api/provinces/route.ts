@@ -6,41 +6,37 @@ export async function POST(
     
 ){
     try{
-        console.log('HOLA')
+
         
         const body = await req.json();
         
         const {
             
             name,
-            religion,
-            currency,
-            weather,
-            region,
-            language,
+            economicactivity,
+            surface,
+            population,
             description,
-            continent,
-            flagUrl} = body;
+            imageUrl,
+            country,
+            } = body;
 
-        if(!name || !flagUrl){
-            return new NextResponse("Missing fields",{status:400});
-        }
+        
 
-        const country = await prisma.country.create({
+        const province = await prisma.province.create({
             data:{
                 
                 name,
-                religion,
-                currency,
-                weather,
-                language,
-                description,
-                continent,
-                flagUrl
+            economicactivity,
+            surface,
+            population,
+            description,
+            imageUrl,
+            country,
             }
         })
         
-        return NextResponse.json(country);
+        return NextResponse.json(province);
     }
     catch(error){
         console.log(error);
@@ -55,13 +51,13 @@ export async function GET(
 ){
     try{
        
-        const country = await prisma.country.findMany   ({
+        const province = await prisma.province.findMany   ({
 
         })
         
 
-        console.log(country)
-        return NextResponse.json(country);
+        
+        return NextResponse.json(province);
     }
     catch(error){
         console.log(error);
