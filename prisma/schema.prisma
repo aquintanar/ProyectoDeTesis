@@ -157,6 +157,7 @@ model City{
   imageUrl String
 
   province Province @relation(fields: [province_id],references:[id],onDelete : Cascade)
+  opportunities Opportunity[]
 }
 
 model Company{
@@ -170,6 +171,8 @@ model Company{
   imageUrl String
   webSite String?
   status String?
+
+  opportunities Opportunity[]
 }
 model Ability{
   id String @id @default(auto()) @map("_id") @db.ObjectId
@@ -200,5 +203,31 @@ model Proyect{
   description String
   imageUrl String
   status String?
+  Opportunity Opportunity[]
+
+}
+
+model Opportunity{
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  name String
+  type_opportunity String
+  proyect_id String? @db.ObjectId
+  company_id String @db.ObjectId
+  city_id String @db.ObjectId
+  description String
+  start_date String
+  end_date String
+  start_time String
+  end_time String
+  acivities String
+  price Float
+  payment Float
+  english_level String
+  status String?
+  imageUrl String
+
+  proyect Proyect? @relation(fields: [proyect_id],references:[id],onDelete : Cascade)
+  company Company @relation(fields: [company_id],references:[id],onDelete : Cascade)
+  city City @relation(fields: [city_id],references:[id],onDelete : Cascade)
 
 }
