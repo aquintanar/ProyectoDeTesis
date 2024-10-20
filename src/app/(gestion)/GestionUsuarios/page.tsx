@@ -13,10 +13,12 @@ import getListings from "@/app/actions/getListings";
 import ListingCard from "@/app/components/listings/ListingCard";
 import AddButton from "@/app/components/AddButton";
 import prismadb from '@/app/libs/prismadb';
-import CountryCard from "./CountryCard";
+import { User } from "lucide-react";
+import UserCard from "./UserCard";
+
 
 export default  async function Gestion(){
-    const countries = await prismadb.country.findMany({
+    const users = await prismadb.user.findMany({
         orderBy:{
             name:'asc'
         }
@@ -65,23 +67,18 @@ export default  async function Gestion(){
                     w-full
                 
                 ">
-                {countries.map((country:any)=>{
+                {users.map((user:any)=>{
                     return(
-                    <CountryCard
-                        key={country.id}
-                        data={country}
+                    <UserCard
+                        key={user.id}
+                        data={user}
                     />
                     )
 
                 })}
                 </div>
-                <div className="flex justify-end">
-                    <AddButton
-                        label={"Agregar Pais"}
-                        href={"/GestionPaises/507f1f77bcf86cd799439011"}
-                    
-                    />
-                </div>
+                
+                
                
             </div>
             

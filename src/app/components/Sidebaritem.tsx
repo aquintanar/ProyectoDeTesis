@@ -19,7 +19,7 @@ export const SidebarItem= ({
 }: Props)=>{
     const pathname = usePathname()
     var active =  pathname === href
-    if(pathname === href+'/AgregarPais' ){
+    if(pathname?.startsWith(href)){
         active = true
     }
     return(

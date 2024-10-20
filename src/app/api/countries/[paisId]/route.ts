@@ -36,7 +36,14 @@ export async function PATCH(
     try{
         const body = await req.json();
 
-        const {name,flagUrl} = body;
+        const {name,
+            religion,
+            currency,
+            weather,
+            language,
+            description,
+            continent,
+            flagUrl} = body;
 
         if(!name || !flagUrl){
             return new NextResponse("Missing fields",{status:400});
@@ -49,6 +56,12 @@ export async function PATCH(
             },
             data:{
                 name,
+                religion,
+                currency,
+                weather,
+                language,
+                description,
+                continent,
                 flagUrl
             }
         })

@@ -1,7 +1,7 @@
 'use client'
 import useCountries from "@/app/hooks/useCountries";
 import { SafeUser } from "@/app/types";
-import {  Province } from "@prisma/client"
+import { Country, Listing, Reservation, User } from "@prisma/client"
 import { useRouter } from "next/navigation";
 import { useCallback, useMemo } from "react";
 import {format} from 'date-fns'
@@ -9,16 +9,30 @@ import Image from "next/image";
 
 import Button from "@/app/components/Button";
 
-interface ProvinceCardProps{
-    data:Province;
+interface UserCardProps{
+    data:User;
 }
 
-const ProvinceCard : React.FC<ProvinceCardProps> = ({
+const UserCard : React.FC<UserCardProps> = ({
     data,
 }) =>{
     const router = useRouter();
     const {getByValue} = useCountries();
 
+    /*const handleCancel = useCallback(
+        (e:React.MouseEvent<HTMLButtonElement>)=>{
+            e.stopPropagation();
+            if(disabled){
+                return;
+            }
+            onAction?.(actionId)
+
+
+        },[onAction,actionId,disabled]
+
+       
+    )*/
+  
 
 
 
@@ -27,7 +41,7 @@ const ProvinceCard : React.FC<ProvinceCardProps> = ({
         
         <div
 
-            onClick={()=>router.push(`/GestionProvincias/${data.id}`)}
+            onClick={()=>router.push(`/listings/${data.id}`)}
 
             className="col-span-1
             
@@ -54,20 +68,7 @@ const ProvinceCard : React.FC<ProvinceCardProps> = ({
                     "
                 
                 >
-                    <Image
-                        fill
-                        alt="Liting"
-                        src={data.imageUrl}
-                        className="
-                            object-cover
-                            h-full
-                            w-full
-                            group-hover:scale-110
-                            transition
-                        
-                        "
                     
-                    />
                     
 
 
@@ -80,7 +81,7 @@ const ProvinceCard : React.FC<ProvinceCardProps> = ({
 
                 </div>
                 <div className=" font-light text-neutral-500">
-                    {data.name}
+
                 </div>
                 <div className="flex flex-row items-center gap-1">
                     <div className="font-semibold">
@@ -100,4 +101,4 @@ const ProvinceCard : React.FC<ProvinceCardProps> = ({
 
 }
 
-export default ProvinceCard
+export default UserCard

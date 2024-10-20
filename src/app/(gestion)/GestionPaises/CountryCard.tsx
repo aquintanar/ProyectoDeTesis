@@ -41,7 +41,7 @@ const CountryCard : React.FC<CountryCardProps> = ({
         
         <div
 
-            onClick={()=>router.push(`/listings/${data.id}`)}
+            onClick={()=>router.push(`/GestionPaises/${data.id}`)}
 
             className="col-span-1
             

@@ -60,7 +60,7 @@ export async function GET(
         })
         
 
-        console.log(country)
+        
         return NextResponse.json(country);
     }
     catch(error){

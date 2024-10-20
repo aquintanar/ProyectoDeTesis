@@ -29,27 +29,132 @@ import Heading from "@/app/components/Heading";
 import { Input } from "@/components/ui/input";
 import ImageUpload from "@/components/ui/image-upload";
 import ToasterProvider from "@/app/providers/ToasterProvider";
-
+import Select from 'react-select';
 interface CountryFormProps{
     initialData:Country  | null;
 }
 
 const formSchema = z.object({
     name: z.string().min(1),
-    language:z.string().min(1),
-    currency:z.string().min(1),
-    weather:z.string().min(1),
-    description:z.string().min(1),
-    religion:z.string().min(1),
-    continent:z.string().min(1),
+    language: z.object({
+        value: z.string().min(1),
+        label: z.string().min(1)
+    }),
+    currency: z.object({
+        value: z.string().min(1),
+        label: z.string().min(1)
+    }),
+    weather: z.object({
+        value: z.string().min(1),
+        label: z.string().min(1)
+    }),
+    description: z.string().min(1),
+    religion: z.object({
+        value: z.string().min(1),
+        label: z.string().min(1)
+    }),
+    continent: z.object({
+        value: z.string().min(1),
+        label: z.string().min(1)
+    }),
     flagUrl: z.string().min(1)
-})
+});
 
 
 type CountryFormValues = z.infer<typeof formSchema>
+const languageOptions=[
+    { value: 'Mandarín', label: 'Mandarín' },
+    { value: 'Español', label: 'Español' },
+    { value: 'Inglés', label: 'Inglés' },
+    { value: 'Hindi', label: 'Hindi' },
+    { value: 'Bengalí', label: 'Bengalí' },
+    { value: 'Portugués', label: 'Portugués' },
+    { value: 'Ruso', label: 'Ruso' },
+    { value: 'Japonés', label: 'Japonés' },
+    { value: 'Panyabí occidental', label: 'Panyabí occidental' },
+    { value: 'Maratí', label: 'Maratí' },
+    { value: 'Telugu', label: 'Telugu' },
+    { value: 'Chino Wu', label: 'Chino Wu' },
+    { value: 'Turco', label: 'Turco' },
+    { value: 'Coreano', label: 'Coreano' },
+    { value: 'Francés', label: 'Francés' },
+    { value: 'Alemán', label: 'Alemán' },
+    { value: 'Vietnamita', label: 'Vietnamita' },
+    { value: 'Tamil', label: 'Tamil' },
+    { value: 'Chino Yue', label: 'Chino Yue' },
+    { value: 'Urdu', label: 'Urdu' },
+]
+const currencyOptions=[
+    { value: 'Dólar estadounidense', label: 'Dólar estadounidense' },
+    { value: 'Euro', label: 'Euro' },
+    { value: 'Yen japonés', label: 'Yen japonés' },
+    { value: 'Libra esterlina', label: 'Libra esterlina' },
+    { value: 'Dólar australiano', label: 'Dólar australiano' },
+    { value: 'Dólar canadiense', label: 'Dólar canadiense' },
+    { value: 'Franco suizo', label: 'Franco suizo' },
+    { value: 'Yuan chino', label: 'Yuan chino' },
+    { value: 'Corona sueca', label: 'Corona sueca' },
+    { value: 'Peso mexicano', label: 'Peso mexicano' },
+    { value: 'Dólar neozelandés', label: 'Dólar neozelandés' },
+    { value: 'Peso argentino', label: 'Peso argentino' },
+    { value: 'Real brasileño', label: 'Real brasileño' },
+    { value: 'Rublo ruso', label: 'Rublo ruso' },
+    { value: 'Rupia india', label: 'Rupia india' },
+    { value: 'Won surcoreano', label: 'Won surcoreano' },
+    { value: 'Rupia indonesia', label: 'Rupia indonesia' },
+    { value: 'Lira turca', label: 'Lira turca' },
+    { value: 'Rand sudafricano', label: 'Rand sudafricano' },
+    { value: 'Dólar singapurense', label: 'Dólar singapurense' },
 
 
+]
 
+const religionOptions = [
+    { value: 'Christianismo', label: 'Cristianismo' },
+    { value: 'Islamismo', label: 'Islam' },
+    { value: 'Hinduismo', label: 'Hinduismo' },
+    { value: 'Budismo', label: 'Budismo' },
+    { value: 'Judaismo', label: 'Judaísmo' },
+    { value: 'Religiones Étnicas', label: 'Religiones Étnicas' },
+    { value: 'Taosimo', label: 'Taosimo' },
+    { value: 'Sijismo', label: 'Sijismo' },
+    { value: 'Jainismo', label: 'Jainismo' },
+    { value: 'Bahaismo', label: 'Bahaismo' },
+    { value: 'Otro', label: 'Otro' },
+];
+const continentsOptions = [
+    { value: 'América', label: 'América' },
+    { value: 'Africa', label: 'Africa' },
+    { value: 'Europa', label: 'Europa' },
+    { value: 'Asia', label: 'Asia' },
+    { value: 'Oceanía', label: 'Oceanía' },
+    { value: 'Antartida', label: 'Antartida' },
+
+];
+
+const weatherOptions = [
+    { value: 'Soleado', label: 'Soleado' },
+    { value: 'Lluvioso', label: 'Lluvioso' },
+    { value: 'Nublado', label: 'Nublado' },
+    { value: 'Nevado', label: 'Nevado' },
+    { value: 'Ventoso', label: 'Ventoso' },
+    { value: 'Tormentoso', label: 'Tormentoso' },
+    { value: 'Húmedo', label: 'Húmedo' },
+    { value: 'Seco', label: 'Seco' },
+    { value: 'Frío', label: 'Frío' },
+    { value: 'Caluroso', label: 'Caluroso' },
+];
+
+var data2 ={
+    name: 'Mexico',
+    language:'',
+    description:'',
+    religion: '',
+    continent: '',
+    currency: 'MXN',
+    weather: 'Soleado',
+    flagUrl:''
+}
 
 export const CountryForm : React.FC<CountryFormProps> = ({initialData}) => {
     const params = useParams();
@@ -60,7 +165,7 @@ export const CountryForm : React.FC<CountryFormProps> = ({initialData}) => {
 
     
     const title = initialData? 'Editar Pais' : 'Agregar Pais';
-    const description = initialData? 'Edita un pais ya existente' : 'Agrega un pais a la lista';
+    const description = initialData? 'Edita un pais ya existente. Recuerda que los cambios se verán reflejados para todos los usuarios' : 'Agrega un pais a la lista. En estos países es en donde se tendrán las oportunidades';
 
     const toastMessage = initialData? 'Pais editado con exito' : 'Pais agregado con exito';
 
@@ -68,35 +173,63 @@ export const CountryForm : React.FC<CountryFormProps> = ({initialData}) => {
 
     const form = useForm<CountryFormValues>({
         resolver:zodResolver(formSchema),
-        defaultValues:initialData  || {
-
-            name:'',
-            religion:'',
-            currency:'',
-            weather:'',
-            language:'',
-            description:'',
-            continent:'',
-            flagUrl:''
+        defaultValues: initialData ? {
+            ...initialData,
+            religion: { value: initialData.religion, label: initialData.religion },
+            continent: { value: initialData.continent, label: initialData.continent },
+            currency: { value: initialData.currency, label: initialData.currency },
+            weather: { value: initialData.weather, label: initialData.weather },
+            language: { value: initialData.language, label: initialData.language }
+        } : {
+            name: '',
+            religion: { value: '', label: '' },
+            continent: { value: '', label: '' },
+            currency: { value: '', label: '' },
+            weather: { value: '', label: '' },
+            language: { value: '', label: '' },
+            description: '',
+            flagUrl: ''
         }
     });
 
+    const LoadingSpinner = () => (
+        <div className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-75 z-50">
+            <div className="animate-spin rounded-full h-32 w-32 border-t-4 border-b-4 border-indigo-500"></div>
+        </div>
+    );
     
     const onSubmit = async (data:CountryFormValues) => {
+
+        
+        data2.name = data.name;
+        data2.language = data.language.value;
+        data2.description = data.description;
+        data2.religion = data.religion.value;
+        data2.continent = data.continent.value;
+        data2.currency = data.currency.value;
+        data2.weather = data.weather.value;
+        data2.flagUrl = data.flagUrl;
+
+ 
+        
         try{
             setLoading(true);
             if(initialData){
-                await axios.patch(`/api/countries/${params?.paisId}`,data);    
+                await axios.patch(`/api/countries/${params?.paisId}`,data2);
+
             }
             else{
                 console.log(data);
-                await axios.post(`/api/countries`,data);    
+                await axios.post(`/api/countries`,data2);    
            
             }
             
             router.refresh()
             
             toast.success(toastMessage);
+            setTimeout(() => {
+                router.back();
+            }, 1000);
             
         }
         catch(error){
@@ -117,7 +250,9 @@ export const CountryForm : React.FC<CountryFormProps> = ({initialData}) => {
             router.refresh()
             
             toast.success("Pais eliminado");
-            
+            setTimeout(() => {
+                router.back();
+            }, 1000);
         }
         catch(error){
             toast.error("Ocurrio un error al editar el pais");
@@ -131,6 +266,7 @@ export const CountryForm : React.FC<CountryFormProps> = ({initialData}) => {
     return(
         <>
         <ToasterProvider/>
+        {loading && <LoadingSpinner/>}
             <div className="flex items-center  justify-between ">
                 <Heading title={title} subtitle={description}/>
                 {initialData && (
@@ -138,6 +274,7 @@ export const CountryForm : React.FC<CountryFormProps> = ({initialData}) => {
                     disabled={loading}
                     variant="danger"
                     size="icon"
+                    onClick={onDelete}
                 >
                     <Trash className="h-4 w-4"/>
                 </Button>
@@ -166,20 +303,16 @@ export const CountryForm : React.FC<CountryFormProps> = ({initialData}) => {
                             name="religion"
                             render={({field})=>(
                                 <FormItem>
-                                    <FormLabel>Religion</FormLabel>
+                                    <FormLabel>Religión</FormLabel>
                                     <FormControl>
-                                        <select 
-                                            disabled={loading} 
-                                            {...field} 
-                                            className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                                        >
-                                            <option value="">Seleccione una religión</option>
-                                            <option value="christianity">Cristianismo</option>
-                                            <option value="islam">Islam</option>
-                                            <option value="hinduism">Hinduismo</option>
-                                            <option value="buddhism">Budismo</option>
-                                            <option value="judaism">Judaísmo</option>
-                                        </select>
+                                        <Select
+                                            {...field}
+                                            defaultInputValue={initialData?.religion}
+                                            options={religionOptions as any}
+                                            isDisabled={loading}
+                                            classNamePrefix="react-select"
+                                            placeholder="Seleccione una religión"
+                                        />
                                     </FormControl>
                                     <FormMessage/>
                                 </FormItem>
@@ -195,19 +328,15 @@ export const CountryForm : React.FC<CountryFormProps> = ({initialData}) => {
                                 <FormItem>
                                     <FormLabel>Continente</FormLabel>
                                     <FormControl>
-                                    <select 
-                                            disabled={loading} 
-                                            {...field} 
-                                            className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                                        >
-                                            <option value="">Seleccione un continente</option>
-                                            <option value="africa">África</option>
-                                            <option value="asia">Asia</option>
-                                            <option value="europe">Europa</option>
-                                            <option value="america">América</option>
-                                            <option value="oceania">Oceania</option>
-                                            <option value="antarctica">Antártida</option>
-                                        </select>
+                                    <Select
+                                            {...field}
+                                            options={continentsOptions as any}
+                                            isDisabled={loading}
+                                            defaultInputValue={initialData?.continent}
+                                            classNamePrefix="react-select"
+                                            placeholder="Seleccione una religión"
+                                            
+                                        />
                                     </FormControl>
                                     <FormMessage/>
                                 </FormItem>
@@ -220,20 +349,15 @@ export const CountryForm : React.FC<CountryFormProps> = ({initialData}) => {
                                 <FormItem>
                                     <FormLabel>Idioma</FormLabel>
                                     <FormControl>
-                                    <select 
-                                        disabled={loading} 
-                                        {...field} 
-                                        className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                                    >
-                                        <option value="">Seleccione un idioma</option>
-                                        <option value="spanish">Español</option>
-                                        <option value="english">Inglés</option>
-                                        <option value="french">Francés</option>
-                                        <option value="german">Alemán</option>
-                                        <option value="chinese">Chino</option>
-                                        <option value="japanese">Japonés</option>
-                                        <option value="arabic">Árabe</option>
-                                    </select>
+                                    <Select
+                                            {...field}
+                                            options={languageOptions as any}
+                                            isDisabled={loading}
+                                            defaultInputValue={initialData?.language}
+                                            classNamePrefix="react-select"
+                                            placeholder="Seleccione una religión"
+                                            
+                                        />
                                     </FormControl>
                                     <FormMessage/>
                                 </FormItem>
@@ -246,20 +370,15 @@ export const CountryForm : React.FC<CountryFormProps> = ({initialData}) => {
                                 <FormItem>
                                     <FormLabel>Moneda</FormLabel>
                                     <FormControl>
-                                    <select 
-                                        disabled={loading} 
-                                        {...field} 
-                                        className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                                    >
-                                        <option value="">Seleccione una moneda</option>
-                                        <option value="usd">Dólar estadounidense</option>
-                                        <option value="eur">Euro</option>
-                                        <option value="gbp">Libra esterlina</option>
-                                        <option value="jpy">Yen japonés</option>
-                                        <option value="cny">Yuan chino</option>
-                                        <option value="inr">Rupia india</option>
-                                        <option value="brl">Real brasileño</option>
-                                    </select>
+                                    <Select
+                                            {...field}
+                                            options={currencyOptions as any}
+                                            isDisabled={loading}
+                                            defaultInputValue={initialData?.currency}
+                                            classNamePrefix="react-select"
+                                            placeholder="Seleccione una religión"
+                                            
+                                        />
                                     </FormControl>
                                     <FormMessage/>
                                 </FormItem>
@@ -274,7 +393,12 @@ export const CountryForm : React.FC<CountryFormProps> = ({initialData}) => {
                                 <FormItem>
                                     <FormLabel>Descripción</FormLabel>
                                     <FormControl>
-                                        <Input disabled={loading} placeholder="Descripción" {...field}/>
+                                    <textarea 
+                                            disabled={loading} 
+                                            placeholder="Descripción" 
+                                            {...field} 
+                                             className="block w-full h-32 mt-1 border border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-left align-top p-2"
+                                        />
                                     </FormControl>
                                     <FormMessage/>
                                 </FormItem>
@@ -289,19 +413,15 @@ export const CountryForm : React.FC<CountryFormProps> = ({initialData}) => {
                                 <FormItem>
                                     <FormLabel>Clima</FormLabel>
                                     <FormControl>
-                                    <select 
-                                            disabled={loading} 
-                                            {...field} 
-                                            className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                                        >
-                                            <option value="">Seleccione un clima</option>
-                                            <option value="sunny">Soleado</option>
-                                            <option value="rainy">Lluvioso</option>
-                                            <option value="cloudy">Nublado</option>
-                                            <option value="snowy">Nevado</option>
-                                            <option value="windy">Ventoso</option>
-                                            <option value="stormy">Tormentoso</option>
-                                        </select>
+                                    <Select
+                                            {...field}
+                                            options={weatherOptions as any}
+                                            isDisabled={loading}
+                                            defaultInputValue={initialData?.weather}
+                                            classNamePrefix="react-select"
+                                            placeholder="Seleccione una religión"
+                                            
+                                        />
                                     </FormControl>
                                     <FormMessage/>
                                 </FormItem>
@@ -327,10 +447,11 @@ export const CountryForm : React.FC<CountryFormProps> = ({initialData}) => {
                                 </FormItem>
                             )}
                         />
-                    
-                    <Button disabled={loading} className="ml-auto" type="submit">
+                    <div className=" flex justify-end">
+                    <Button disabled={loading} className="ml-auto justify-end" type="submit">
                         {action}
                     </Button>
+                    </div>
                 </form>
             </Form>
             <Separator/>
