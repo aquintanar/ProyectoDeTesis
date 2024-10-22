@@ -29,7 +29,7 @@ import Heading from "@/app/components/Heading";
 import { Input } from "@/components/ui/input";
 import ImageUpload from "@/components/ui/image-upload";
 import ToasterProvider from "@/app/providers/ToasterProvider";
-
+import Select from 'react-select';
 interface ProyectFormProps{
     initialData:Proyect  | null;
 }
@@ -38,14 +38,28 @@ interface ProyectFormProps{
 
 
 const formSchema = z.object({
-    ods: z.string().min(1),
+    ods:z.object({
+        value: z.string().min(1),
+        label: z.string().min(1)
+    }),
     description:z.string().min(1),
     name:z.string().min(1),
     imageUrl:z.string().min(1),
 
 })
 
-
+const odsOptions = [
+    { value: 'Soleado', label: 'Soleado' },
+    { value: 'Lluvioso', label: 'Lluvioso' },
+    { value: 'Nublado', label: 'Nublado' },
+    { value: 'Nevado', label: 'Nevado' },
+    { value: 'Ventoso', label: 'Ventoso' },
+    { value: 'Tormentoso', label: 'Tormentoso' },
+    { value: 'Húmedo', label: 'Húmedo' },
+    { value: 'Seco', label: 'Seco' },
+    { value: 'Frío', label: 'Frío' },
+    { value: 'Caluroso', label: 'Caluroso' },
+];
 type ProyectFormValues = z.infer<typeof formSchema>
 
 
@@ -69,37 +83,52 @@ export const ProyectForm : React.FC<ProyectFormProps> = ({initialData}) => {
 
     const form = useForm<ProyectFormValues>({
         resolver:zodResolver(formSchema),
-        defaultValues:initialData  || {
+        defaultValues: initialData ? {
+            ods: { value: initialData.ods, label: initialData.ods },
+            description: initialData.description,
+            name: initialData.name,
+            imageUrl: initialData.imageUrl,
+        } : {
 
-            ods:'',
+            ods:{ value: '', label: '' },
             description:'',
             name:'',
             imageUrl:'',
            
         }
     });
-
+    var data2={
+        ods: '',
+        description:'',
+        name:'',
+        imageUrl:'',
+    }
  
     const onSubmit = async (data:ProyectFormValues) => {
         console.log(data);
-
+        data2.name = data.name
+        data2.description = data.description
+        data2.ods = data.ods.value
+        data2.imageUrl = data.imageUrl
 
         
         try{
             setLoading(true);
             if(initialData){
-                await axios.patch(`/api/proyects/${params?.provinceid}`,);    
+                await axios.patch(`/api/proyects/${params?.proyectoId}`,data2);    
             }
             else{
                 
-                await axios.post(`/api/proyects`,data);    
+                await axios.post(`/api/proyects`,data2);    
            
             }
             
             router.refresh()
             
             toast.success(toastMessage);
-            
+            setTimeout(() => {
+                router.back();
+            }, 1000);
         }
         catch(error){
             toast.error("Ocurrio un error al editar la ciudad");
@@ -112,14 +141,16 @@ export const ProyectForm : React.FC<ProyectFormProps> = ({initialData}) => {
         try{
             setLoading(true);
             
-            await axios.delete(`/api/proyects/${params?.paisId}`);    
+            await axios.delete(`/api/proyects/${params?.proyectoId}`);    
             
            
             
             router.refresh()
             
-            toast.success("Pais eliminado");
-            
+            toast.success("Proyecto eliminado");
+            setTimeout(() => {
+                router.back();
+            }, 1000);
         }
         catch(error){
             toast.error("Ocurrio un error al editar el pais");
@@ -128,11 +159,16 @@ export const ProyectForm : React.FC<ProyectFormProps> = ({initialData}) => {
         }
     }
 
-
+    const LoadingSpinner = () => (
+        <div className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-75 z-50">
+            <div className="animate-spin rounded-full h-32 w-32 border-t-4 border-b-4 border-indigo-500"></div>
+        </div>
+    );
 
     return(
         <>
         <ToasterProvider/>
+        {loading && <LoadingSpinner/>}
             <div className="flex items-center  justify-between ">
                 <Heading title={title} subtitle={description}/>
                 {initialData && (
@@ -140,6 +176,7 @@ export const ProyectForm : React.FC<ProyectFormProps> = ({initialData}) => {
                     disabled={loading}
                     variant="danger"
                     size="icon"
+                    onClick={onDelete}
                 >
                     <Trash className="h-4 w-4"/>
                 </Button>
@@ -170,18 +207,14 @@ export const ProyectForm : React.FC<ProyectFormProps> = ({initialData}) => {
                                 <FormItem>
                                     <FormLabel>ODS</FormLabel>
                                     <FormControl>
-                                    <select 
-                                            disabled={loading} 
-                                            {...field} 
-                                            className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                                        >
-                                            <option value="">Seleccione una religión</option>
-                                            <option value="christianity">Cristianismo</option>
-                                            <option value="islam">Islam</option>
-                                            <option value="hinduism">Hinduismo</option>
-                                            <option value="buddhism">Budismo</option>
-                                            <option value="judaism">Judaísmo</option>
-                                        </select>
+                                    <Select
+                                            {...field}
+                                            defaultInputValue={initialData?.ods}
+                                            options={odsOptions as any}
+                                            isDisabled={loading}
+                                            classNamePrefix="react-select"
+                                            placeholder="Seleccione un sector"
+                                        />
                                     </FormControl>
                                     <FormMessage/>
                                 </FormItem>
@@ -199,7 +232,12 @@ export const ProyectForm : React.FC<ProyectFormProps> = ({initialData}) => {
                                 <FormItem>
                                     <FormLabel>Descripción</FormLabel>
                                     <FormControl>
-                                        <Input disabled={loading} placeholder="Descripción" {...field}/>
+                                    <textarea 
+                                            disabled={loading} 
+                                            placeholder="Descripción" 
+                                            {...field} 
+                                             className="block w-full h-32 mt-1 border border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-left align-top p-2"
+                                        />
                                     </FormControl>
                                     <FormMessage/>
                                 </FormItem>
@@ -215,7 +253,7 @@ export const ProyectForm : React.FC<ProyectFormProps> = ({initialData}) => {
                             name="imageUrl"
                             render={({field})=>(
                                 <FormItem>
-                                    <FormLabel>Imagen de Bandera</FormLabel>
+                                    <FormLabel>Imagen del Proyecto</FormLabel>
                                     <FormControl>
                                         <ImageUpload 
                                             value={field.value?[field.value]:[]}
@@ -228,10 +266,11 @@ export const ProyectForm : React.FC<ProyectFormProps> = ({initialData}) => {
                                 </FormItem>
                             )}
                         />
-                    
+                    <div className=" flex justify-end">
                     <Button disabled={loading} className="ml-auto" type="submit">
                         {action}
                     </Button>
+                    </div>
                 </form>
             </Form>
             <Separator/>

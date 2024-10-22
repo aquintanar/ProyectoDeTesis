@@ -29,14 +29,17 @@ import Heading from "@/app/components/Heading";
 import { Input } from "@/components/ui/input";
 import ImageUpload from "@/components/ui/image-upload";
 import ToasterProvider from "@/app/providers/ToasterProvider";
-
+import Select from 'react-select';
 interface CityFormProps{
     initialData:City  | null;
 }
 
 const formSchema = z.object({
     name: z.string().min(1),
-    province:z.string().min(1),
+    province:z.object({
+        value: z.string().min(1),
+        label: z.string().min(1)
+    }),
     description:z.string().min(1),
     imageUrl: z.string().min(1)
 })
@@ -68,7 +71,7 @@ export const CityForm : React.FC<CityFormProps> = ({initialData}) => {
         defaultValues:initialData  || {
 
             name:'',
-            province:'',
+            province:{ value: '', label: '' },
             description:'',
             imageUrl:'',
            
@@ -79,10 +82,14 @@ export const CityForm : React.FC<CityFormProps> = ({initialData}) => {
         const fetchCountries = async () => {
             try{
                 const response = await axios.get('/api/provinces');
+                const provinceOptions = response.data.map((province:Province) => ({
+                    value:province.id,
+                    label:province.name
+                }))
                 
-                console.log('HOLAAA')
-                console.log(response.data);
-                setProvinces(response.data);
+              
+                setProvinces(provinceOptions);
+
                 
             }
             catch(error){
@@ -98,23 +105,30 @@ export const CityForm : React.FC<CityFormProps> = ({initialData}) => {
         description:'',
         imageUrl:'',
     }
+    const LoadingSpinner = () => (
+        <div className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-75 z-50">
+            <div className="animate-spin rounded-full h-32 w-32 border-t-4 border-b-4 border-indigo-500"></div>
+        </div>
+    );
     const onSubmit = async (data:CityFormValues) => {
-        console.log(data);
+        
         data2.description = data.description;
         data2.name = data.name;
         data2.imageUrl = data.imageUrl;
-        data2.province = data.province;
+        data2.province = data.province.value;
         
+        const payload = {...data2,province:{connect:{id:data2.province}}};
+                
 
         
         try{
             setLoading(true);
             if(initialData){
-                await axios.patch(`/api/cities/${params?.provinceid}`,);    
+                await axios.patch(`/api/cities/${params?.ciudadId}`,payload);    
             }
             else{
                 
-                const payload = {...data2,province:{connect:{id:data.province}}};
+          
                 
                 await axios.post(`/api/cities`,payload);    
            
@@ -123,6 +137,9 @@ export const CityForm : React.FC<CityFormProps> = ({initialData}) => {
             router.refresh()
             
             toast.success(toastMessage);
+            setTimeout(() => {
+                router.back();
+            }, 1000);
             
         }
         catch(error){
@@ -136,14 +153,16 @@ export const CityForm : React.FC<CityFormProps> = ({initialData}) => {
         try{
             setLoading(true);
             
-            await axios.delete(`/api/citiess/${params?.paisId}`);    
+            await axios.delete(`/api/cities/${params?.ciudadId}`);    
             
            
             
             router.refresh()
             
-            toast.success("Pais eliminado");
-            
+            toast.success("Ciudad eliminada");
+            setTimeout(() => {
+                router.back();
+            }, 1000);
         }
         catch(error){
             toast.error("Ocurrio un error al editar el pais");
@@ -157,6 +176,7 @@ export const CityForm : React.FC<CityFormProps> = ({initialData}) => {
     return(
         <>
         <ToasterProvider/>
+        {loading && <LoadingSpinner/>}
             <div className="flex items-center  justify-between ">
                 <Heading title={title} subtitle={description}/>
                 {initialData && (
@@ -164,6 +184,7 @@ export const CityForm : React.FC<CityFormProps> = ({initialData}) => {
                     disabled={loading}
                     variant="danger"
                     size="icon"
+                    onClick={onDelete}
                 >
                     <Trash className="h-4 w-4"/>
                 </Button>
@@ -194,18 +215,14 @@ export const CityForm : React.FC<CityFormProps> = ({initialData}) => {
                                 <FormItem>
                                     <FormLabel>Provincia</FormLabel>
                                     <FormControl>
-                                    <select 
-                                            disabled={loading} 
-                                            {...field} 
-                                            className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                                        >
-                                           <option value="">Seleccione una provincia</option>
-                                        {provinces.map((province) => (
-                                            <option key={province.id} value={province.id}>
-                                                {province.name}
-                                            </option>
-                                        ))}
-                                        </select>
+                                    <Select
+                                            {...field}
+                                            defaultInputValue={initialData?.province_id}
+                                            options={provinces as any}
+                                            isDisabled={loading}
+                                            classNamePrefix="react-select"
+                                            placeholder="Seleccione una religión"
+                                        />
                                     </FormControl>
                                     <FormMessage/>
                                 </FormItem>
@@ -221,7 +238,12 @@ export const CityForm : React.FC<CityFormProps> = ({initialData}) => {
                                 <FormItem>
                                     <FormLabel>Descripción</FormLabel>
                                     <FormControl>
-                                        <Input disabled={loading} placeholder="Descripción" {...field}/>
+                                    <textarea 
+                                            disabled={loading} 
+                                            placeholder="Descripción" 
+                                            {...field} 
+                                             className="block w-full h-32 mt-1 border border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-left align-top p-2"
+                                        />
                                     </FormControl>
                                     <FormMessage/>
                                 </FormItem>
@@ -250,10 +272,11 @@ export const CityForm : React.FC<CityFormProps> = ({initialData}) => {
                                 </FormItem>
                             )}
                         />
-                    
+                    <div className=" flex justify-end">
                     <Button disabled={loading} className="ml-auto" type="submit">
                         {action}
                     </Button>
+                    </div>
                 </form>
             </Form>
             <Separator/>

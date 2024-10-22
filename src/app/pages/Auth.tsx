@@ -72,11 +72,17 @@ const Auth = () =>{
 
         console.log('HOLA')
 
+        
+
+        const formFilled =false;
+        const status="Activo";
         axios.post('../../api/register',{
             email,
             name,
             phone,
-            password
+            password,
+            formFilled,
+            status
         })
         .then(()=>{
             toast.success('Se ha registrado satisfactoriamente')

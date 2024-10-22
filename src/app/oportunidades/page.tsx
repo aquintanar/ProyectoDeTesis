@@ -4,6 +4,7 @@ import ClientOnly from "../components/ClientOnly";
 import Container from "../components/Container";
 import EmptyState from "../components/EmptyState";
 import ListingCard from "../components/listings/ListingCard";
+import IngresoModal from "../components/modals/IngresoModal";
 import LoginModal from "../components/modals/LoginModal";
 import RegisterModal from "../components/modals/RegisterModal";
 import RentModal from "../components/modals/RentModal";
@@ -15,15 +16,16 @@ export default async function Oportunidades(){
     const currentUser = await getCurrentUser();
     const listings  = await getListings();
 
-
+    
     const isEmpty= true;
-
+    
 
     return(
         <>
         <ClientOnly>
           <ToasterProvider/>
-          <RentModal/>
+          <RentModal />
+          <IngresoModal FormFilled ={currentUser?.formFilled ?? false}/>
           <LoginModal/>
           <RegisterModal/>
           

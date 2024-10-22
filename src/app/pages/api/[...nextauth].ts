@@ -1,6 +1,6 @@
 import { error } from "console";
 import NextAuth from "next-auth/next";
-import prismadb from '@/../lib/prismadb'
+import prismadb from '@/../libs/prismadb'
 import { compare} from 'bcrypt';
 
 import Credentials from "next-auth/providers/credentials";

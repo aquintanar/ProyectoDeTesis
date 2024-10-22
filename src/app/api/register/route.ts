@@ -11,7 +11,9 @@ export async function POST(
         email,
         name,
         phone,
-        password
+        password,
+        formFilled,
+        status,
     } = body
 
     const hashedPassword=await bcrypt.hash(password,12);
@@ -21,7 +23,9 @@ export async function POST(
             email,
             name,
             phone,
-            hashedPassword
+            hashedPassword,
+            formFilled,
+            status,
         }
     });
 

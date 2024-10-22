@@ -41,7 +41,7 @@ const CompanyCard : React.FC<CompanyCardProps> = ({
         
         <div
 
-            onClick={()=>router.push(`/listings/${data.id}`)}
+            onClick={()=>router.push(`/GestionEmpresas/${data.id}`)}
 
             className="col-span-1
             

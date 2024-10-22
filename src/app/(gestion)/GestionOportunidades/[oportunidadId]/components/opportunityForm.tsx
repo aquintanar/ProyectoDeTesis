@@ -29,21 +29,54 @@ import Heading from "@/app/components/Heading";
 import { Input } from "@/components/ui/input";
 import ImageUpload from "@/components/ui/image-upload";
 import ToasterProvider from "@/app/providers/ToasterProvider";
-
+import Select from 'react-select';
 interface OpportunityFormProps{
     initialData:Opportunity  | null;
 }
 
+const opportunityTypeOptions = [
+    {value:'agricultura',label:'Agricultura'},
+    {value:'ganaderia',label:'Ganaderia'},
+    {value:'pesca',label:'Pesca'},
+    {value:'mineria',label:'Mineria'},
+    {value:'industria',label:'Industria'},
+    {value:'comercio',label:'Comercio'},
+    {value:'servicios',label:'Servicios'},
+    {value:'otros',label:'Otros'},
 
+]
+const englishLevelOptions = [
+    {value:'agricultura',label:'Agricultura'},
+    {value:'ganaderia',label:'Ganaderia'},
+    {value:'pesca',label:'Pesca'},
+    {value:'mineria',label:'Mineria'},
+    {value:'industria',label:'Industria'},
+    {value:'comercio',label:'Comercio'},
+    {value:'servicios',label:'Servicios'},
+    {value:'otros',label:'Otros'},
+
+]
 
 
 const formSchema = z.object({
    
     name:z.string().min(1),
-    type_opportunity:z.string().min(1),
-    proyect_id:z.string().min(1),
-    company_id:z.string().min(1),
-    city_id:z.string().min(1),
+    type_opportunity:z.object({
+        value: z.string().min(1),
+        label: z.string().min(1)
+    }),
+    proyect_id:z.object({
+        value: z.string().min(1),
+        label: z.string().min(1)
+    }),
+    company_id:z.object({
+        value: z.string().min(1),
+        label: z.string().min(1)
+    }),
+    city_id:z.object({
+        value: z.string().min(1),
+        label: z.string().min(1)
+    }),
     description:z.string().min(1),
     start_date:z.string().min(1),
     end_date:z.string().min(1),
@@ -52,7 +85,10 @@ const formSchema = z.object({
     acivities:z.string().min(1),
     price:z.string().min(1),
     payment:z.string().min(1),
-    english_level:z.string().min(1),
+    english_level:z.object({
+        value: z.string().min(1),
+        label: z.string().min(1)
+    }),
 
     imageUrl:z.string().min(1),
 
@@ -74,6 +110,7 @@ export const OpportunityForm : React.FC<OpportunityFormProps> = ({initialData}) 
     const [cities, setCities] = useState<City[]>([]);
     const [companies, setCompanies] = useState<Company[]>([]);
 
+
     
     const title = initialData? 'Editar Oportunidad' : 'Agregar Oportunidad';
     const description = initialData? 'Edita una oportunidad ya existente' : 'Agrega una oportunidad a la lista';
@@ -84,13 +121,29 @@ export const OpportunityForm : React.FC<OpportunityFormProps> = ({initialData}) 
 
     const form = useForm<OpportunityFormValues>({
         resolver:zodResolver(formSchema),
-        defaultValues:initialData  || {
+        defaultValues: initialData ? {
+            name: initialData.name,
+            type_opportunity: { value: initialData.type_opportunity, label: initialData.type_opportunity },
+            proyect_id: { value: initialData.proyect_id, label: initialData.proyect_id },
+            company_id: { value: initialData.company_id, label: initialData.company_id },
+            city_id: { value: initialData.city_id, label: initialData.city_id },
+            description: initialData.description,
+            start_date: initialData.start_date,
+            end_date: initialData.end_date,
+            start_time: initialData.start_time,
+            end_time: initialData.end_time,
+            acivities: initialData.acivities,
+            price: initialData.price.toString(),
+            payment: initialData.payment.toString(),
+            english_level: { value: initialData.english_level, label: initialData.english_level },
+            imageUrl: initialData.imageUrl,
+        } : {
 
             name:'',
-            type_opportunity:'',
-            proyect_id:'',
-            company_id:'',
-            city_id:'',
+            type_opportunity:{ value: '', label: '' },
+            proyect_id:{ value: '', label: '' },
+            company_id:{ value: '', label: '' },
+            city_id:{ value: '', label: '' },
             description:'',
             start_date:'',
             end_date:'',
@@ -99,8 +152,7 @@ export const OpportunityForm : React.FC<OpportunityFormProps> = ({initialData}) 
             acivities:'',
             price:'',
             payment:'',
-            english_level:'',
-        
+            english_level:{ value: '', label: '' },
             imageUrl:'',
            
         }
@@ -127,10 +179,10 @@ export const OpportunityForm : React.FC<OpportunityFormProps> = ({initialData}) 
     const onSubmit = async (data:OpportunityFormValues) => {
         
         data2.name = data.name;
-        data2.type_opportunity = data.type_opportunity;
-        data2.proyect = data.proyect_id;
-        data2.company= data.company_id;
-        data2.city = data.city_id;
+        data2.type_opportunity = data.type_opportunity.value;
+        data2.proyect = data.proyect_id.value;
+        data2.company= data.company_id.value;
+        data2.city = data.city_id.value;
         data2.description = data.description;
         data2.start_date = data.start_date;
         data2.end_date = data.end_date;
@@ -139,7 +191,7 @@ export const OpportunityForm : React.FC<OpportunityFormProps> = ({initialData}) 
         data2.acivities = data.acivities;
         data2.price = parseInt(data.price);
         data2.payment = parseInt(data.payment);
-        data2.english_level = data.english_level;
+        data2.english_level = data.english_level.value;
         data2.imageUrl = data.imageUrl;
         
 
@@ -147,7 +199,7 @@ export const OpportunityForm : React.FC<OpportunityFormProps> = ({initialData}) 
         try{
             setLoading(true);
             if(initialData){
-                await axios.patch(`/api/opportunities/${params?.provinceid}`,);    
+                await axios.patch(`/api/opportunities/${params?.oportunidadId}`,);    
             }
             else{
                 
@@ -170,7 +222,9 @@ export const OpportunityForm : React.FC<OpportunityFormProps> = ({initialData}) 
             router.refresh()
             
             toast.success(toastMessage);
-            
+            setTimeout(() => {
+                router.back();
+            }, 1000);
         }
         catch(error){
             toast.error("Ocurrio un error al editar el pais");
@@ -182,8 +236,11 @@ export const OpportunityForm : React.FC<OpportunityFormProps> = ({initialData}) 
         const fetchProyects = async () => {
             try{
                 const response = await axios.get('/api/proyects');
-             
-                setProyects(response.data);
+                const proyectOptions = response.data.map((proyect:Proyect) => ({
+                    value:proyect.id,
+                    label:proyect.name
+                }))
+                setProyects(proyectOptions);
                 
             }
             catch(error){
@@ -193,9 +250,12 @@ export const OpportunityForm : React.FC<OpportunityFormProps> = ({initialData}) 
         const fetchCompanies= async () => {
             try{
                 const response = await axios.get('/api/companies');
-                
+                const companiesOptions = response.data.map((company:Company) => ({
+                    value:company.id,
+                    label:company.name
+                }))
               
-                setCompanies(response.data);
+                setCompanies(companiesOptions);
                 
             }
             catch(error){
@@ -205,9 +265,12 @@ export const OpportunityForm : React.FC<OpportunityFormProps> = ({initialData}) 
         const fetchCities= async () => {
             try{
                 const response = await axios.get('/api/cities');
+                const citiesOptions = response.data.map((city:City) => ({
+                    value:city.id,
+                    label:city.name
+                }))
                 
-                
-                setCities(response.data);
+                setCities(citiesOptions);
                 
             }
             catch(error){
@@ -224,14 +287,16 @@ export const OpportunityForm : React.FC<OpportunityFormProps> = ({initialData}) 
         try{
             setLoading(true);
             
-            await axios.delete(`/api/opportunities/${params?.paisId}`);    
+            await axios.delete(`/api/opportunities/${params?.oportunidadId}`);    
             
            
             
             router.refresh()
             
             toast.success("Oportunidad eliminada");
-            
+            setTimeout(() => {
+                router.back();
+            }, 1000);
         }
         catch(error){
             toast.error("Ocurrio un error al editar el pais");
@@ -239,12 +304,17 @@ export const OpportunityForm : React.FC<OpportunityFormProps> = ({initialData}) 
             setLoading(false);
         }
     }
-
+    const LoadingSpinner = () => (
+        <div className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-75 z-50">
+            <div className="animate-spin rounded-full h-32 w-32 border-t-4 border-b-4 border-indigo-500"></div>
+        </div>
+    );
 
 
     return(
         <>
         <ToasterProvider/>
+        {loading && <LoadingSpinner/>}
             <div className="flex items-center  justify-between ">
                 <Heading title={title} subtitle={description}/>
                 {initialData && (
@@ -252,6 +322,7 @@ export const OpportunityForm : React.FC<OpportunityFormProps> = ({initialData}) 
                     disabled={loading}
                     variant="danger"
                     size="icon"
+                    onClick={onDelete}
                 >
                     <Trash className="h-4 w-4"/>
                 </Button>
@@ -282,18 +353,14 @@ export const OpportunityForm : React.FC<OpportunityFormProps> = ({initialData}) 
                                 <FormItem>
                                     <FormLabel>Tipo Oportunidad</FormLabel>
                                     <FormControl>
-                                    <select 
-                                            disabled={loading} 
-                                            {...field} 
-                                            className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                                        >
-                                            <option value="">Seleccione una religión</option>
-                                            <option value="christianity">Cristianismo</option>
-                                            <option value="islam">Islam</option>
-                                            <option value="hinduism">Hinduismo</option>
-                                            <option value="buddhism">Budismo</option>
-                                            <option value="judaism">Judaísmo</option>
-                                        </select>
+                                    <Select
+                                            {...field}
+                                            defaultInputValue={initialData?.proyect_id?.toString()}
+                                            options={opportunityTypeOptions as any}
+                                            isDisabled={loading}
+                                            classNamePrefix="react-select"
+                                            placeholder="Seleccione una religión"
+                                        />
                                     </FormControl>
                                     <FormMessage/>
                                 </FormItem>
@@ -311,18 +378,14 @@ export const OpportunityForm : React.FC<OpportunityFormProps> = ({initialData}) 
                                 <FormItem>
                                     <FormLabel>Proyecto</FormLabel>
                                     <FormControl>
-                                    <select 
-                                            disabled={loading} 
-                                            {...field} 
-                                            className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                                        >
-                                           <option value="">Seleccione un proyecto</option>
-                                        {proyects.map((proyect) => (
-                                            <option key={proyect.id} value={proyect.id}>
-                                                {proyect.name}
-                                            </option>
-                                        ))}
-                                        </select>
+                                    <Select
+                                            {...field}
+                                            defaultInputValue={initialData?.proyect_id?.toString()}
+                                            options={proyects as any}
+                                            isDisabled={loading}
+                                            classNamePrefix="react-select"
+                                            placeholder="Seleccione una religión"
+                                        />
                                     </FormControl>
                                     <FormMessage/>
                                 </FormItem>
@@ -335,18 +398,14 @@ export const OpportunityForm : React.FC<OpportunityFormProps> = ({initialData}) 
                                 <FormItem>
                                     <FormLabel>Empresas</FormLabel>
                                     <FormControl>
-                                    <select 
-                                            disabled={loading} 
-                                            {...field} 
-                                            className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                                        >
-                                           <option value="">Seleccione una empresa</option>
-                                        {companies.map((company) => (
-                                            <option key={company.id} value={company.id}>
-                                                {company.name}
-                                            </option>
-                                        ))}
-                                        </select>
+                                    <Select
+                                            {...field}
+                                            defaultInputValue={initialData?.company_id}
+                                            options={companies as any}
+                                            isDisabled={loading}
+                                            classNamePrefix="react-select"
+                                            placeholder="Seleccione una religión"
+                                        />
                                     </FormControl>
                                     <FormMessage/>
                                 </FormItem>
@@ -359,18 +418,14 @@ export const OpportunityForm : React.FC<OpportunityFormProps> = ({initialData}) 
                                 <FormItem>
                                     <FormLabel>Ciudad</FormLabel>
                                     <FormControl>
-                                    <select 
-                                            disabled={loading} 
-                                            {...field} 
-                                            className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                                        >
-                                           <option value="">Seleccione una ciudad</option>
-                                        {cities.map((city) => (
-                                            <option key={city.id} value={city.id}>
-                                                {city.name}
-                                            </option>
-                                        ))}
-                                        </select>
+                                    <Select
+                                            {...field}
+                                            defaultInputValue={initialData?.city_id}
+                                            options={cities as any}
+                                            isDisabled={loading}
+                                            classNamePrefix="react-select"
+                                            placeholder="Seleccione una religión"
+                                        />
                                     </FormControl>
                                     <FormMessage/>
                                 </FormItem>
@@ -388,7 +443,12 @@ export const OpportunityForm : React.FC<OpportunityFormProps> = ({initialData}) 
                                 <FormItem>
                                     <FormLabel>Descripción</FormLabel>
                                     <FormControl>
-                                        <Input disabled={loading} placeholder="Descripción" {...field}/>
+                                    <textarea 
+                                            disabled={loading} 
+                                            placeholder="Descripción" 
+                                            {...field} 
+                                             className="block w-full h-32 mt-1 border border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-left align-top p-2"
+                                        />
                                     </FormControl>
                                     <FormMessage/>
                                 </FormItem>
@@ -396,7 +456,7 @@ export const OpportunityForm : React.FC<OpportunityFormProps> = ({initialData}) 
                         />  
 
                    
-                    <div className="grid grid-cols-3 gap-8">
+                    <div className="grid grid-cols-4 gap-8">
                         
                        <FormField
                             control={form.control}
@@ -461,7 +521,12 @@ export const OpportunityForm : React.FC<OpportunityFormProps> = ({initialData}) 
                                 <FormItem>
                                     <FormLabel>Actividades</FormLabel>
                                     <FormControl>
-                                        <Input disabled={loading} placeholder="Descripción" {...field}/>
+                                    <textarea 
+                                            disabled={loading} 
+                                            placeholder="Descripción" 
+                                            {...field} 
+                                             className="block w-full h-32 mt-1 border border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-left align-top p-2"
+                                        />
                                     </FormControl>
                                     <FormMessage/>
                                 </FormItem>
@@ -505,7 +570,14 @@ export const OpportunityForm : React.FC<OpportunityFormProps> = ({initialData}) 
                                 <FormItem>
                                     <FormLabel>Nivel de Ingles</FormLabel>
                                     <FormControl>
-                                        <Input disabled={loading} placeholder="Descripción" {...field}/>
+                                    <Select
+                                            {...field}
+                                            defaultInputValue={initialData?.english_level}
+                                            options={englishLevelOptions as any}
+                                            isDisabled={loading}
+                                            classNamePrefix="react-select"
+                                            placeholder="Seleccione una religión"
+                                        />
                                     </FormControl>
                                     <FormMessage/>
                                 </FormItem>
@@ -539,10 +611,11 @@ export const OpportunityForm : React.FC<OpportunityFormProps> = ({initialData}) 
                                 </FormItem>
                             )}
                         />
-                    
+                    <div className=" flex justify-end">
                     <Button disabled={loading} className="ml-auto" type="submit">
                         {action}
                     </Button>
+                    </div>
                 </form>
             </Form>
             <Separator/>

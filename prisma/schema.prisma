@@ -27,6 +27,18 @@ model User{
   favoriteIds String[] @db.ObjectId
   phone String?
 
+  role String?
+  date_to_travel DateTime?
+  study_area String?
+  favorite_program  String?
+  english_level String?
+  status String?
+
+  formFilled Boolean
+
+
+  abilities UserxAbility[]
+  countries UserxCountry[]
 
   sessions Session[]
   accounts Account[]
@@ -34,6 +46,26 @@ model User{
   listings Listing[]
   reservations Reservation[]
 }
+
+model UserxAbility{
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @db.ObjectId
+  abilityId String @db.ObjectId
+
+  user User @relation(fields: [userId],references:[id],onDelete : Cascade)
+  ability Ability @relation(fields: [abilityId],references:[id],onDelete : Cascade)
+}
+
+model UserxCountry{
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @db.ObjectId
+  countryId String @db.ObjectId
+
+  user User @relation(fields: [userId],references:[id],onDelete : Cascade)
+  country Country @relation(fields: [countryId],references:[id],onDelete : Cascade)
+}
+
+
 
 model Account{
   id String @id @default(auto()) @map("_id") @db.ObjectId
@@ -128,6 +160,7 @@ model Country{
   flagUrl String
 
   provinces Province[]
+  users UserxCountry[]
 }
 
 model Province{
@@ -183,6 +216,8 @@ model Ability{
   imageUrl String
   status String?
   name String
+
+  users UserxAbility[]
 }
 
 model Document{

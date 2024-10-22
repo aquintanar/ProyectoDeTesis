@@ -41,7 +41,7 @@ const DocumentCard : React.FC<DocumentCardProps> = ({
         
         <div
 
-            onClick={()=>router.push(`/listings/${data.id}`)}
+            onClick={()=>router.push(`/GestionDocumentos/${data.id}`)}
 
             className="col-span-1
             

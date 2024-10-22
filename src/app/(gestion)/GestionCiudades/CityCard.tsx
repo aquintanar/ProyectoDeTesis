@@ -41,7 +41,7 @@ const CityCard : React.FC<CityCardProps> = ({
         
         <div
 
-            onClick={()=>router.push(`/listings/${data.id}`)}
+            onClick={()=>router.push(`/GestionCiudades/${data.id}`)}
 
             className="col-span-1
             

@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 
 export async function GET(
     req:Request,
-    {params}:{params:{habilidadId:string}}
+    {params}:{params:{ciudadId:string}}
 ){
     try{
         
@@ -13,13 +13,13 @@ export async function GET(
         
 
 
-        const ability = await prisma.ability.findUnique({
+        const city = await prisma.city.findUnique({
             where:{
-                id:params.habilidadId,
+                id:params.ciudadId,
             }
         })
         
-        return NextResponse.json(ability);
+        return NextResponse.json(city);
     }
     catch(error){
         console.log(error);
@@ -31,36 +31,34 @@ export async function GET(
 
 export async function PATCH(
     req:Request,
-    {params}:{params:{habilidadId:string}}
+    {params}:{params:{ciudadId:string}}
 ){
     try{
         const body = await req.json();
 
-        const {type,
-            area_of_ability,
+        const {name,
             description,
-            name,
-            imageUrl} = body;
+            imageUrl,
+            province,} = body;
 
         if(!name ){
             return new NextResponse("Missing fields",{status:400});
         }
 
-        const ability = await prisma.ability.updateMany({
+        const city = await prisma.city.updateMany({
             where:{
-                id:params.habilidadId,
+                id:params.ciudadId,
                 
             },
             data:{
-                type,
-            area_of_ability,
-            description,
-            name,
-            imageUrl
+                name,
+                description,
+                imageUrl,
+                province_id:province.id,
             }
         })
         
-        return NextResponse.json(ability);
+        return NextResponse.json(city);
     }
     catch(error){
         console.log(error);
@@ -74,7 +72,7 @@ export async function PATCH(
 
 export async function DELETE(
     req:Request,
-    {params}:{params:{habilidadId:string}}
+    {params}:{params:{ciudadId:string}}
 ){
     try{
         
@@ -82,13 +80,13 @@ export async function DELETE(
         
 
 
-        const ability = await prisma.ability.deleteMany({
+        const city = await prisma.city.deleteMany({
             where:{
-                id:params.habilidadId,
+                id:params.ciudadId,
             }
         })
         
-        return NextResponse.json(ability);
+        return NextResponse.json(city);
     }
     catch(error){
         console.log(error);

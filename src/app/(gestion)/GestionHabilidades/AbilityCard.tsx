@@ -41,7 +41,7 @@ const AbilityCard : React.FC<AbilityCardProps> = ({
         
         <div
 
-            onClick={()=>router.push(`/listings/${data.id}`)}
+            onClick={()=>router.push(`/GestionHabilidades/${data.id}`)}
 
             className="col-span-1
             

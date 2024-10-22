@@ -29,20 +29,64 @@ import Heading from "@/app/components/Heading";
 import { Input } from "@/components/ui/input";
 import ImageUpload from "@/components/ui/image-upload";
 import ToasterProvider from "@/app/providers/ToasterProvider";
-
+import Select from 'react-select';
 interface CompanyFormProps{
     initialData:Company  | null;
 }
 
 
-
+const sectorOptions = [
+    { value: 'Soleado', label: 'Soleado' },
+    { value: 'Lluvioso', label: 'Lluvioso' },
+    { value: 'Nublado', label: 'Nublado' },
+    { value: 'Nevado', label: 'Nevado' },
+    { value: 'Ventoso', label: 'Ventoso' },
+    { value: 'Tormentoso', label: 'Tormentoso' },
+    { value: 'Húmedo', label: 'Húmedo' },
+    { value: 'Seco', label: 'Seco' },
+    { value: 'Frío', label: 'Frío' },
+    { value: 'Caluroso', label: 'Caluroso' },
+];
+const identificationTypeOptions = [
+    { value: 'Soleado', label: 'Soleado' },
+    { value: 'Lluvioso', label: 'Lluvioso' },
+    { value: 'Nublado', label: 'Nublado' },
+    { value: 'Nevado', label: 'Nevado' },
+    { value: 'Ventoso', label: 'Ventoso' },
+    { value: 'Tormentoso', label: 'Tormentoso' },
+    { value: 'Húmedo', label: 'Húmedo' },
+    { value: 'Seco', label: 'Seco' },
+    { value: 'Frío', label: 'Frío' },
+    { value: 'Caluroso', label: 'Caluroso' },
+];
+const companyTypeOptions = [
+    { value: 'Soleado', label: 'Soleado' },
+    { value: 'Lluvioso', label: 'Lluvioso' },
+    { value: 'Nublado', label: 'Nublado' },
+    { value: 'Nevado', label: 'Nevado' },
+    { value: 'Ventoso', label: 'Ventoso' },
+    { value: 'Tormentoso', label: 'Tormentoso' },
+    { value: 'Húmedo', label: 'Húmedo' },
+    { value: 'Seco', label: 'Seco' },
+    { value: 'Frío', label: 'Frío' },
+    { value: 'Caluroso', label: 'Caluroso' },
+];
 
 const formSchema = z.object({
     name: z.string().min(1),
-    sector:z.string().min(1),
-    identification_type:z.string().min(1),
+    sector:z.object({
+        value: z.string().min(1),
+        label: z.string().min(1)
+    }),
+    identification_type:z.object({
+        value: z.string().min(1),
+        label: z.string().min(1)
+    }),
     identification_number:z.string().min(1),
-    type_of_company:z.string().min(1),
+    type_of_company:z.object({
+        value: z.string().min(1),
+        label: z.string().min(1)
+    }),
     description:z.string().min(1),
     imageUrl: z.string().min(1),
     webSite: z.string().min(1),
@@ -72,13 +116,19 @@ export const CompanyForm : React.FC<CompanyFormProps> = ({initialData}) => {
 
     const form = useForm<CompanyFormValues>({
         resolver:zodResolver(formSchema),
-        defaultValues: initialData ? { ...initialData, webSite: initialData.webSite || '' } : {
+        defaultValues: initialData ? { 
+            ...initialData, 
+            webSite: initialData.webSite || '', 
+            sector: { value: initialData.sector, label: initialData.sector },
+            identification_type: { value: initialData.identification_type, label: initialData.identification_type },
+            type_of_company: { value: initialData.type_of_company, label: initialData.type_of_company }
+        } : {
 
             name: '',
-            sector:'',
-            identification_type:'',
+            sector:{ value: '', label: '' },
+            identification_type:{ value: '', label: '' },
             identification_number:'',
-            type_of_company:'',
+            type_of_company:{ value: '', label: '' },
             description:'',
             imageUrl: '',
             webSite: '',
@@ -102,10 +152,10 @@ export const CompanyForm : React.FC<CompanyFormProps> = ({initialData}) => {
         data2.description = data.description;
         data2.name = data.name;
         data2.imageUrl = data.imageUrl;
-        data2.sector = data.sector;
-        data2.identification_type = data.identification_type;
+        data2.sector = data.sector.value;
+        data2.identification_type = data.identification_type.value;
         data2.identification_number = data.identification_number;
-        data2.type_of_company = data.type_of_company;
+        data2.type_of_company = data.type_of_company.value;
         data2.webSite = data.webSite;
 
 
@@ -113,7 +163,7 @@ export const CompanyForm : React.FC<CompanyFormProps> = ({initialData}) => {
         try{
             setLoading(true);
             if(initialData){
-                await axios.patch(`/api/companies/${params?.provinceid}`,);    
+                await axios.patch(`/api/companies/${params?.empresaId}`,data2);    
             }
             else{
                 
@@ -124,7 +174,9 @@ export const CompanyForm : React.FC<CompanyFormProps> = ({initialData}) => {
             router.refresh()
             
             toast.success(toastMessage);
-            
+            setTimeout(() => {
+                router.back();
+            }, 1000);
         }
         catch(error){
             toast.error("Ocurrio un error al editar la ciudad");
@@ -132,19 +184,25 @@ export const CompanyForm : React.FC<CompanyFormProps> = ({initialData}) => {
             setLoading(false);
         }
     }
-    
+    const LoadingSpinner = () => (
+        <div className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-75 z-50">
+            <div className="animate-spin rounded-full h-32 w-32 border-t-4 border-b-4 border-indigo-500"></div>
+        </div>
+    );
     const onDelete = async () => {
         try{
             setLoading(true);
             
-            await axios.delete(`/api/companies/${params?.paisId}`);    
+            await axios.delete(`/api/companies/${params?.empresaId}`);    
             
            
             
             router.refresh()
             
-            toast.success("Pais eliminado");
-            
+            toast.success("Documento eliminado");
+            setTimeout(() => {
+                router.back();
+            }, 1000);
         }
         catch(error){
             toast.error("Ocurrio un error al editar el pais");
@@ -158,6 +216,7 @@ export const CompanyForm : React.FC<CompanyFormProps> = ({initialData}) => {
     return(
         <>
         <ToasterProvider/>
+        {loading && <LoadingSpinner/>}
             <div className="flex items-center  justify-between ">
                 <Heading title={title} subtitle={description}/>
                 {initialData && (
@@ -165,6 +224,7 @@ export const CompanyForm : React.FC<CompanyFormProps> = ({initialData}) => {
                     disabled={loading}
                     variant="danger"
                     size="icon"
+                    onClick={onDelete}
                 >
                     <Trash className="h-4 w-4"/>
                 </Button>
@@ -195,18 +255,14 @@ export const CompanyForm : React.FC<CompanyFormProps> = ({initialData}) => {
                                 <FormItem>
                                     <FormLabel>Sector</FormLabel>
                                     <FormControl>
-                                    <select 
-                                            disabled={loading} 
-                                            {...field} 
-                                            className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                                        >
-                                            <option value="">Seleccione una religión</option>
-                                            <option value="christianity">Cristianismo</option>
-                                            <option value="islam">Islam</option>
-                                            <option value="hinduism">Hinduismo</option>
-                                            <option value="buddhism">Budismo</option>
-                                            <option value="judaism">Judaísmo</option>
-                                        </select>
+                                    <Select
+                                            {...field}
+                                            defaultInputValue={initialData?.sector}
+                                            options={sectorOptions as any}
+                                            isDisabled={loading}
+                                            classNamePrefix="react-select"
+                                            placeholder="Seleccione un sector"
+                                        />
                                     </FormControl>
                                     <FormMessage/>
                                 </FormItem>
@@ -236,18 +292,14 @@ export const CompanyForm : React.FC<CompanyFormProps> = ({initialData}) => {
                                 <FormItem>
                                     <FormLabel>Tipo de Identificacion</FormLabel>
                                     <FormControl>
-                                    <select 
-                                            disabled={loading} 
-                                            {...field} 
-                                            className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                                        >
-                                            <option value="">Seleccione una religión</option>
-                                            <option value="christianity">Cristianismo</option>
-                                            <option value="islam">Islam</option>
-                                            <option value="hinduism">Hinduismo</option>
-                                            <option value="buddhism">Budismo</option>
-                                            <option value="judaism">Judaísmo</option>
-                                        </select>
+                                    <Select
+                                            {...field}
+                                            defaultInputValue={initialData?.identification_type}
+                                            options={identificationTypeOptions as any}
+                                            isDisabled={loading}
+                                            classNamePrefix="react-select"
+                                            placeholder="Seleccione un tipo de identificación"
+                                        />
                                     </FormControl>
                                     <FormMessage/>
                                 </FormItem>
@@ -273,18 +325,14 @@ export const CompanyForm : React.FC<CompanyFormProps> = ({initialData}) => {
                                 <FormItem>
                                     <FormLabel>Tipo de Empresa</FormLabel>
                                     <FormControl>
-                                    <select 
-                                            disabled={loading} 
-                                            {...field} 
-                                            className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                                        >
-                                            <option value="">Seleccione una religión</option>
-                                            <option value="christianity">Cristianismo</option>
-                                            <option value="islam">Islam</option>
-                                            <option value="hinduism">Hinduismo</option>
-                                            <option value="buddhism">Budismo</option>
-                                            <option value="judaism">Judaísmo</option>
-                                        </select>
+                                    <Select
+                                            {...field}
+                                            defaultInputValue={initialData?.type_of_company}
+                                            options={companyTypeOptions as any}
+                                            isDisabled={loading}
+                                            classNamePrefix="react-select"
+                                            placeholder="Seleccione un tipo"
+                                        />
                                     </FormControl>
                                     <FormMessage/>
                                 </FormItem>
@@ -300,7 +348,12 @@ export const CompanyForm : React.FC<CompanyFormProps> = ({initialData}) => {
                                 <FormItem>
                                     <FormLabel>Descripción</FormLabel>
                                     <FormControl>
-                                        <Input disabled={loading} placeholder="Descripción" {...field}/>
+                                    <textarea 
+                                            disabled={loading} 
+                                            placeholder="Descripción" 
+                                            {...field} 
+                                             className="block w-full h-32 mt-1 border border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-left align-top p-2"
+                                        />
                                     </FormControl>
                                     <FormMessage/>
                                 </FormItem>
@@ -329,10 +382,11 @@ export const CompanyForm : React.FC<CompanyFormProps> = ({initialData}) => {
                                 </FormItem>
                             )}
                         />
-                    
+                    <div className=" flex justify-end">
                     <Button disabled={loading} className="ml-auto" type="submit">
                         {action}
                     </Button>
+                    </div>
                 </form>
             </Form>
             <Separator/>
