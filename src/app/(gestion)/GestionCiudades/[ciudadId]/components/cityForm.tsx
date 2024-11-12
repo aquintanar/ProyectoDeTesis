@@ -259,7 +259,7 @@ export const CityForm : React.FC<CityFormProps> = ({initialData}) => {
                             name="imageUrl"
                             render={({field})=>(
                                 <FormItem>
-                                    <FormLabel>Imagen de Bandera</FormLabel>
+                                    <FormLabel>Imagen de Ciudad</FormLabel>
                                     <FormControl>
                                         <ImageUpload 
                                             value={field.value?[field.value]:[]}

@@ -2,26 +2,26 @@ import getCurrentUser from "@/app/actions/getCurrentUser";
 import getListingById from "@/app/actions/getListingById"
 import ClientOnly from "@/app/components/ClientOnly";
 import EmptyState from "@/app/components/EmptyState";
-import ListingClient from "./ListingClient";
 import getReservations from "@/app/actions/getReservations";
 import { SafeListings, SafeUser } from "@/app/types";
+import getOportunidadById from "@/app/actions/getOportunidadById";
+import OportunidadClient from "./OportunidadClient";
 
 
 interface IParams {
-    listingId?:string,
+    oportunidadId?:string,
 
 }
 
-const ListingPage = async({params}:{params:IParams}) =>{
-    const listing = await getListingById(params) as SafeListings & { user: SafeUser };
-    const reservations = await getReservations(params);
+const OportunidadPage = async({params}:{params:IParams}) =>{
+    const oportunidad = await getOportunidadById(params) 
     const currentUser = await getCurrentUser();
-    console.log(listing)
+
     
     
 
     
-    if (!listing) {
+    if (!oportunidad) {
         return (
             <ClientOnly>
                 <EmptyState />
@@ -32,13 +32,13 @@ const ListingPage = async({params}:{params:IParams}) =>{
     return (
         <ClientOnly>
             
-            <ListingClient
-                listing={listing}
-                reservation={reservations}
+            <OportunidadClient
+                oportunidad={oportunidad}
+                
                 currentUser={currentUser}
             />
         </ClientOnly>
     );
 }
 
-export default ListingPage
+export default OportunidadPage

@@ -2,14 +2,17 @@
 
 import { useCallback, useState } from "react";
 import Input from "../components/Input";
-import axios from "axios";
+import axios, { Axios } from "axios";
 import toast from "react-hot-toast";
 import { FcGoogle } from "react-icons/fc";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { set } from "date-fns";
 
 
 const Auth = () =>{
+
+    const [loading,setLoading] = useState(false);
     const [email,setEmail]=useState('');
     const [name,setName]=useState('');
     const [password,setPassword]=useState('');
@@ -20,7 +23,7 @@ const Auth = () =>{
     const [secondpassword,setSecondpassword] = useState('');
 
     const router = useRouter();
-
+   
 
     const regexemail= /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
@@ -32,17 +35,39 @@ const Auth = () =>{
 
     const login = useCallback(async()=>{
         
+        setLoading(true);
         signIn('credentials',{
             email,
             password,
             redirect:false,
             callbackUrl:'/actividad'
         })
-        .then((callback)=>{
+        .then(async (callback) => {
             toast.success('Se ha iniciado sesion correctamente')
+            setLoading(false);
 
-            router.push('/actividad')
-        }).catch((error)=>{
+            var data = {
+                email: email
+            }
+
+            try {
+                var usuario = await axios.get(`../../api/usuario/${email}`)
+            }
+
+            catch (error) {
+                toast.error('No se ha podido iniciar sesion')
+                return;
+            }
+
+            
+            if(usuario.data.role === 'Cliente'){
+                router.push('/oportunidades')
+            }
+            else{
+                router.push('/actividad')
+            }
+          
+        }).catch((error) => {
             toast.error('No se ha podido iniciar sesion')
         })
 
@@ -51,28 +76,28 @@ const Auth = () =>{
     },[email,password])
 
     const register = useCallback(async()=>{
-        
+        setLoading(true);
         if(!regexemail.test(email)){
              toast.error('Debe ser una dirección de correo válida')
+             setLoading(false);
              return;    
         }
 
         if(!(/^\d+$/.test(phone))){
             toast.error('El campo de teléfono solo debe contener números')
+            setLoading(false);
             return;
         }
         
         
         if(password!== secondpassword){
             toast.error('Ambas contraseñas deben ser iguales')
+            setLoading(false);
             return;
         }
         
 
-
-        console.log('HOLA')
-
-        
+        var role = 'Cliente';
 
         const formFilled =false;
         const status="Activo";
@@ -82,14 +107,14 @@ const Auth = () =>{
             phone,
             password,
             formFilled,
-            status
+            status,
+            role
         })
         .then(()=>{
             toast.success('Se ha registrado satisfactoriamente')
             setVariant('login')
-
+            setLoading(false);
             login()
-
         })
         .catch((error)=>{
             toast.error('El correo ya está registrado');
@@ -101,16 +126,22 @@ const Auth = () =>{
     },[email,name,phone,password,login])
 
    
-
+    const LoadingSpinner = () => (
+        <div className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-75 z-50">
+            <div className="animate-spin rounded-full h-32 w-32 border-t-4 border-b-4 border-indigo-500"></div>
+        </div>
+    );
 
 
     return (
-        <div className="relative h-full w-full bg-[url('/LoginBackground.jpg')] bg-no-repeat bg-center bg-fixed bg-cover ">
-            <div className="bg-black w-full h-full lg:bg-opacity-10">
+        <>
+        {loading && <LoadingSpinner/>}
+        <div className="relative h-full w-full bg-[url('/LoginBackground.jpg')] bg-no-repeat bg-center bg-fixed bg-cover">
+            <div className="bg-black w-full h-full bg-opacity-10">
                 <nav className="px-12 py-5">
                     <img src='/AIESEC_logo.png' alt="Logo" className="h-12"/>
                 </nav>
-                <div className="flex justify-center">
+                <div className="flex justify-center py-2">
                     <div className="bg-white bg-opacity-100 px-16 py-16 self-center mt-2 lg:w-2/5 lg:max-w-md rounded-md w-full">
                         <h2 className="text-[#037EF3] text-4xl mb-8 font-bold">
                             {variant==='login'?'INICIAR SESIÓN':'CREAR CUENTA'}
@@ -203,6 +234,7 @@ const Auth = () =>{
                 </div>
             </div>
         </div>
+        </>
     );
 }
 

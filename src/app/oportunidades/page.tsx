@@ -1,5 +1,6 @@
 import getCurrentUser from "../actions/getCurrentUser";
 import getListings from "../actions/getListings";
+import getOportunidades from "../actions/getOportunidades";
 import ClientOnly from "../components/ClientOnly";
 import Container from "../components/Container";
 import EmptyState from "../components/EmptyState";
@@ -10,22 +11,28 @@ import RegisterModal from "../components/modals/RegisterModal";
 import RentModal from "../components/modals/RentModal";
 import Categories from "../components/navbar/Categories";
 import Navbar from "../components/navbar/Navbar";
+import OpportunityCard from "../components/oportunidades/OpportunityCard";
 import ToasterProvider from "../providers/ToasterProvider";
 
 export default async function Oportunidades(){
     const currentUser = await getCurrentUser();
     const listings  = await getListings();
-
+    const oportunidades = await getOportunidades();
     
     const isEmpty= true;
     
-
+    
     return(
         <>
         <ClientOnly>
           <ToasterProvider/>
           <RentModal />
-          <IngresoModal FormFilled ={currentUser?.formFilled ?? false}/>
+          {currentUser && (
+            <IngresoModal
+              FormFilled={currentUser.formFilled}
+              userLogged={currentUser.id}
+            />
+          )}
           <LoginModal/>
           <RegisterModal/>
           
@@ -44,7 +51,7 @@ export default async function Oportunidades(){
                     gap-8
                 
                 ">
-                {listings.map((listing:any)=>{
+                {/*listings.map((listing:any)=>{
                     return(
                     <ListingCard
                         currentUser = {currentUser}
@@ -54,7 +61,20 @@ export default async function Oportunidades(){
                     />
                     )
 
-                })}
+                })*/}
+                {oportunidades.map((oportunidad:any)=>{
+                    return(
+                        <OpportunityCard
+                            currentUser={currentUser}
+                            key={oportunidad.id} 
+                            data={oportunidad}                       
+                        />
+
+                    )
+                })
+ 
+
+                }
                 </div>
             </Container>
 

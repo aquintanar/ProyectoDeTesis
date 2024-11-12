@@ -17,11 +17,12 @@ import { useRouter } from "next/navigation"
 import { TbBeach } from "react-icons/tb"
 import { GiWindmill } from "react-icons/gi"
 import { MdOutlineNetworkWifi2Bar, MdOutlineNetworkWifi3Bar, MdOutlineSignalWifi0Bar, MdOutlineSignalWifiStatusbar4Bar } from "react-icons/md"
-import { Ability, Country } from "@prisma/client"
+import { Ability, Country, User } from "@prisma/client"
 import { IoMdConstruct } from "react-icons/io"
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { Controller } from 'react-hook-form';
+import { set } from "date-fns"
 
 
 
@@ -105,13 +106,15 @@ const programOptions = [
 
 interface IngresoModalProps{
     FormFilled:boolean;
+    userLogged : string;
 }
 
 const IngresoModal:React.FC<IngresoModalProps> = ({
-    FormFilled
+    FormFilled,
+    userLogged
 })=>{
     const { control } = useForm();
-    const [selectedDate, setSelectedDate] = useState(null);
+    const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
     const router = useRouter()
     const rentModal = useRentModal()
@@ -162,7 +165,7 @@ const IngresoModal:React.FC<IngresoModalProps> = ({
 
     const [ability,setAbilities] = useState<Ability[]>([]);
     const [country,setCountries] = useState<Country[]>([]);
-
+    
     const category = watch('category');
     const location = watch('location');
     const guestCount = watch('guestCount');
@@ -192,24 +195,66 @@ const IngresoModal:React.FC<IngresoModalProps> = ({
             return onNext();
         }
         setIsLoading(true);
+        if(data.english_level==='No lo he podido practicar'){data.english_level='Sin nivel'}
+        if(data.english_level==='Tengo un nivel básico'){data.english_level='Básico'}
+        if(data.english_level==='Tengo un nivel intermedio'){data.english_level='Intermedio'}
+        if(data.english_level==='Tengo un nivel avanzado'){data.english_level='Avanzado'}
 
-        console.log(data);
+        const idAbility = ability.find((item)=>item.name===data.abilities)?.id;
 
-        /*axios.post('/api/listings',data)
+        const idCountry = country.find((item)=>item.name===data.countries)?.id;
+
+
+        const data_to_send ={
+            english_level:data.english_level,
+            abilitiesId:idAbility,
+            countriesId:idCountry,
+            studies:data.studies,
+            fav_program:data.fav_program,
+            idUser:userLogged,
+        }
+        console.log(data_to_send);
+
+        axios.patch('/api/users',data_to_send)
         .then(()=>{
             toast.success('Listing Created!')
-            router.refresh()
-            reset()
-            setStep(STEPS.CATEGORY);
-
-            rentModal.onClose();
+            
+           
         })
         .catch(()=>{
             toast.error('Something went wrong')
         })
         .finally(()=>{
             setIsLoading(false);
-        })*/
+        })
+
+        axios.post('/api/userXability',data_to_send)
+        .then(()=>{
+            toast.success('Listing Created!')
+            //router.refresh()
+           
+        })
+        .catch(()=>{
+            toast.error('Something went wrong')
+        })
+        .finally(()=>{
+            setIsLoading(false);
+        })
+        axios.post('/api/userXcountry',data_to_send)
+        .then(()=>{
+            toast.success('Listing Created!')
+            //router.refresh()
+           
+        })
+        .catch(()=>{
+            toast.error('Something went wrong')
+        })
+        .finally(()=>{
+            setIsLoading(false);
+        })
+
+        router.refresh()
+
 
     }
         useEffect(()=>{
@@ -249,16 +294,16 @@ const IngresoModal:React.FC<IngresoModalProps> = ({
 
     const actionLabel = useMemo(()=>{
         if(step===STEPS.FINISH){
-            return 'Create';
+            return 'Finalizar';
         }
-        return 'Next'
+        return 'Siguiente'
     },[step])
 
     const secondaryActionLabel = useMemo(()=>{
         if(step===STEPS.START){
             return undefined;
         }
-        return 'Back';
+        return 'Atrás';
     },[step])
 
     let bodyContent = (
@@ -277,8 +322,6 @@ const IngresoModal:React.FC<IngresoModalProps> = ({
                 overflow-y-auto
 
             ">
-                
-
             </div>
         </div>
 
@@ -464,7 +507,10 @@ const IngresoModal:React.FC<IngresoModalProps> = ({
                 render={({ field }) => (
                     <DatePicker
                         selected={field.value}
-                        onChange={(date) => field.onChange(date)}
+                        onChange={(date) => {
+                            field.onChange(date);
+                            setSelectedDate(date);
+                        }}
                         disabled={isLoading}
                         placeholderText="Seleccione una fecha"
                         className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"

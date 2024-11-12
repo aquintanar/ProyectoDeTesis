@@ -49,16 +49,23 @@ const formSchema = z.object({
 })
 
 const odsOptions = [
-    { value: 'Soleado', label: 'Soleado' },
-    { value: 'Lluvioso', label: 'Lluvioso' },
-    { value: 'Nublado', label: 'Nublado' },
-    { value: 'Nevado', label: 'Nevado' },
-    { value: 'Ventoso', label: 'Ventoso' },
-    { value: 'Tormentoso', label: 'Tormentoso' },
-    { value: 'Húmedo', label: 'Húmedo' },
-    { value: 'Seco', label: 'Seco' },
-    { value: 'Frío', label: 'Frío' },
-    { value: 'Caluroso', label: 'Caluroso' },
+    { value: '1. Fin de la Pobreza', label: '1. Fin de la Pobreza' },
+    { value: '2. Hambre Cero', label: '2. Hambre Cero' },
+    { value: '3. Salud y Bienestar', label: '3. Salud y Bienestar' },
+    { value: '4. Educación de Calidad', label: '4. Educación de Calidad' },
+    { value: '5. Igualdad de Género', label: '5. Igualdad de Género' },
+    { value: '6. Agua Limpia y Saneamiento', label: '6. Agua Limpia y Saneamiento' },
+    { value: '7. Energía Asequible y No Contaminante', label: '7. Energía Asequible y No Contaminante' },
+    { value: '8. Trabajo Decente y Crecimiento Económico', label: '8. Trabajo Decente y Crecimiento Económico' },
+    { value: '9. Industria, Innovación e Infraestructura', label: '9. Industria, Innovación e Infraestructura' },
+    { value: '10. Reducción de las Desigualdades', label: '10. Reducción de las Desigualdades' },
+    { value: '11. Ciudades y Comunidades Sostenibles', label: '11. Ciudades y Comunidades Sostenibles' },
+    { value: '12. Producción y Consumo Responsables', label: '12. Producción y Consumo Responsables' },
+    { value: '13. Acción por el Clima', label: '13. Acción por el Clima' },
+    { value: '14. Vida Submarina', label: '14. Vida Submarina' },
+    { value: '15. Vida de Ecosistemas Terrestres', label: '15. Vida de Ecosistemas Terrestres' },
+    { value: '16. Paz, Justicia e Instituciones Sólidas', label: '16. Paz, Justicia e Instituciones Sólidas' },
+    { value: '17. Alianzas para Lograr los Objetivos', label: '17. Alianzas para Lograr los Objetivos' },
 ];
 type ProyectFormValues = z.infer<typeof formSchema>
 

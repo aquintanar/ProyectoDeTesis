@@ -52,28 +52,37 @@ const formSchema = z.object({
 
 })
 const abilityTypeOptions = [
-    { value: 'Soleado', label: 'Soleado' },
-    { value: 'Lluvioso', label: 'Lluvioso' },
-    { value: 'Nublado', label: 'Nublado' },
-    { value: 'Nevado', label: 'Nevado' },
-    { value: 'Ventoso', label: 'Ventoso' },
-    { value: 'Tormentoso', label: 'Tormentoso' },
-    { value: 'Húmedo', label: 'Húmedo' },
-    { value: 'Seco', label: 'Seco' },
-    { value: 'Frío', label: 'Frío' },
-    { value: 'Caluroso', label: 'Caluroso' },
+    { value: 'Habilidades técnicas', label: 'Habilidades técnicas' },
+    { value: 'Habilidades informáticas', label: 'Habilidades informáticas' },
+    { value: 'Habilidades de investigación', label: 'Habilidades de investigación' },
+    { value: 'Habilidades de presentación', label: 'Habilidades de presentación' },
+    { value: 'Habilidades de escritura', label: 'Habilidades de escritura' },
+    { value: 'Habilidades de ventas', label: 'Habilidades de ventas' },
+    { value: 'Habilidades de marketing', label: 'Habilidades de marketing' },
+    { value: 'Habilidades de servicio al cliente', label: 'Habilidades de servicio al cliente' },
+    { value: 'Habilidades de gestión de proyectos', label: 'Habilidades de gestión de proyectos' },
 ];
 const areaAbilityTypeOptions = [
-    { value: 'Soleado', label: 'Soleado' },
-    { value: 'Lluvioso', label: 'Lluvioso' },
-    { value: 'Nublado', label: 'Nublado' },
-    { value: 'Nevado', label: 'Nevado' },
-    { value: 'Ventoso', label: 'Ventoso' },
-    { value: 'Tormentoso', label: 'Tormentoso' },
-    { value: 'Húmedo', label: 'Húmedo' },
-    { value: 'Seco', label: 'Seco' },
-    { value: 'Frío', label: 'Frío' },
-    { value: 'Caluroso', label: 'Caluroso' },
+    { value: 'Desarrollo de Software', label: 'Desarrollo de Software' },
+    { value: 'Ciencia de Datos', label: 'Ciencia de Datos' },
+    { value: 'Marketing Digital', label: 'Marketing Digital' },
+    { value: 'Gestión de Proyectos', label: 'Gestión de Proyectos' },
+    { value: 'Recursos Humanos', label: 'Recursos Humanos' },
+    { value: 'Finanzas', label: 'Finanzas' },
+    { value: 'Ventas', label: 'Ventas' },
+    { value: 'Atención al Cliente', label: 'Atención al Cliente' },
+    { value: 'Diseño Gráfico', label: 'Diseño Gráfico' },
+    { value: 'Ingeniería', label: 'Ingeniería' },
+    { value: 'Educación', label: 'Educación' },
+    { value: 'Salud', label: 'Salud' },
+    { value: 'Logística', label: 'Logística' },
+    { value: 'Consultoría', label: 'Consultoría' },
+    { value: 'Investigación y Desarrollo', label: 'Investigación y Desarrollo' },
+    { value: 'Producción', label: 'Producción' },
+    { value: 'Calidad', label: 'Calidad' },
+    { value: 'Compras', label: 'Compras' },
+    { value: 'Legal', label: 'Legal' },
+    { value: 'Comunicación', label: 'Comunicación' },
 ];
 
 type AbilityFormValues = z.infer<typeof formSchema>
@@ -293,7 +302,7 @@ export const AbilityForm : React.FC<AbilityFormProps> = ({initialData}) => {
                             name="imageUrl"
                             render={({field})=>(
                                 <FormItem>
-                                    <FormLabel>Imagen de Bandera</FormLabel>
+                                    <FormLabel>Imagen de Habilidad</FormLabel>
                                     <FormControl>
                                         <ImageUpload 
                                             value={field.value?[field.value]:[]}

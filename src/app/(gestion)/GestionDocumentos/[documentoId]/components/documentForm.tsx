@@ -54,16 +54,10 @@ const formSchema = z.object({
 type DocumentFormValues = z.infer<typeof formSchema>
 
 const documentTypeOptions = [
-    { value: 'Soleado', label: 'Soleado' },
-    { value: 'Lluvioso', label: 'Lluvioso' },
-    { value: 'Nublado', label: 'Nublado' },
-    { value: 'Nevado', label: 'Nevado' },
-    { value: 'Ventoso', label: 'Ventoso' },
-    { value: 'Tormentoso', label: 'Tormentoso' },
-    { value: 'Húmedo', label: 'Húmedo' },
-    { value: 'Seco', label: 'Seco' },
-    { value: 'Frío', label: 'Frío' },
-    { value: 'Caluroso', label: 'Caluroso' },
+    { value: 'Documento de Viaje', label: 'Documento de Viaje' },
+    { value: 'Documento Médico', label: 'Documento Médico' },
+    { value: 'Documento Adicional', label: 'Documento Adicional' },
+    
 ];
 
 

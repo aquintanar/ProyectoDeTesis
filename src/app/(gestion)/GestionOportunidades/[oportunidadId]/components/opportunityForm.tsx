@@ -35,26 +35,14 @@ interface OpportunityFormProps{
 }
 
 const opportunityTypeOptions = [
-    {value:'agricultura',label:'Agricultura'},
-    {value:'ganaderia',label:'Ganaderia'},
-    {value:'pesca',label:'Pesca'},
-    {value:'mineria',label:'Mineria'},
-    {value:'industria',label:'Industria'},
-    {value:'comercio',label:'Comercio'},
-    {value:'servicios',label:'Servicios'},
-    {value:'otros',label:'Otros'},
-
+    {value:'Talento Global',label:'Talento Global'},
+    {value:'Voluntario Global',label:'Voluntario Global'},
+    {value:'Profesor Global',label:'Profesor Global'},
 ]
 const englishLevelOptions = [
-    {value:'agricultura',label:'Agricultura'},
-    {value:'ganaderia',label:'Ganaderia'},
-    {value:'pesca',label:'Pesca'},
-    {value:'mineria',label:'Mineria'},
-    {value:'industria',label:'Industria'},
-    {value:'comercio',label:'Comercio'},
-    {value:'servicios',label:'Servicios'},
-    {value:'otros',label:'Otros'},
-
+    {value:'Básico',label:'Básico'},
+    {value:'Intermedio',label:'Intermedio'},
+    {value:'Avanzado',label:'Avanzado'},
 ]
 
 
@@ -205,16 +193,16 @@ export const OpportunityForm : React.FC<OpportunityFormProps> = ({initialData}) 
                 
                 const payload = {...data2,
                     proyect:{
-                        connect:{id:data.proyect_id}
+                        connect:{id:data.proyect_id.value}
                     }
                     ,company:{
-                        connect:{id:data.company_id}
+                        connect:{id:data.company_id.value}
                     },
                     city:{
-                        connect:{id:data.city_id}
+                        connect:{id:data.city_id.value}
                     }            
                 };
-                
+                   
                 await axios.post(`/api/opportunities`,payload);    
            
             }
@@ -598,7 +586,7 @@ export const OpportunityForm : React.FC<OpportunityFormProps> = ({initialData}) 
                             name="imageUrl"
                             render={({field})=>(
                                 <FormItem>
-                                    <FormLabel>Imagen de Bandera</FormLabel>
+                                    <FormLabel>Imagen de Oportunidad</FormLabel>
                                     <FormControl>
                                         <ImageUpload 
                                             value={field.value?[field.value]:[]}

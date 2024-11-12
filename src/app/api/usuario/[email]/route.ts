@@ -1,21 +1,15 @@
 import prisma from "@/app/libs/prismadb"
 import { NextResponse } from "next/server";
 
-
-
 export async function GET(
     req:Request,
-    {params}:{params:{usuarioId:string}}
+    {params}:{params:{email:string}}
 ){
     try{
         
-
-        
-
-
         const usuario = await prisma.user.findUnique({
             where:{
-                id:params.usuarioId,
+                email:params.email,
             }
         })
         

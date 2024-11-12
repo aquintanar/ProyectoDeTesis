@@ -8,10 +8,13 @@ import RegisterModal from "@/app/components/modals/RegisterModal";
 import RentModal from "@/app/components/modals/RentModal";
 import { categories } from "@/app/components/navbar/Categories";
 import Navbar from "@/app/components/navbar/Navbar";
+import OpportunityApplication from "@/app/components/oportunidades/OpportunityApplication";
+import OpportunityHead from "@/app/components/oportunidades/OpportunityHead";
+import OpportunityInfo from "@/app/components/oportunidades/OpportunityInfo";
 import useLoginModal from "@/app/hooks/useLoginModal";
 import ToasterProvider from "@/app/providers/ToasterProvider";
 import { SafeListings, safeReservation, SafeUser } from "@/app/types";
-import { Listing, Reservation } from "@prisma/client";
+import { Listing, Opportunity, Reservation } from "@prisma/client";
 import axios from "axios";
 import { differenceInCalendarDays, differenceInDays, eachDayOfInterval } from "date-fns";
 import { useRouter } from "next/navigation";
@@ -30,52 +33,35 @@ const initialDateRange = {
 }
 
 
-interface ListingClientProps{
-    reservation?: safeReservation[];
-    listing: SafeListings & {
-        user:SafeUser
-    }
+interface OportunidadClientProps{
+    oportunidad: Opportunity
     currentUser?: SafeUser | null;
 }
-const ListingClient: React.FC<ListingClientProps>  = ({
-    listing,
-    reservation=[],
+const OportunidadClient: React.FC<OportunidadClientProps>  = ({
+    oportunidad,
     currentUser
 }) =>{
-    const loginModal = useLoginModal();
     const router = useRouter();
 
-    const disabledDates = useMemo(()=>{
-        let dates: Date[] = [];
-        reservation.forEach((reservation)=>{
-            const range = eachDayOfInterval({
-                start: new Date(reservation.startDate),
-                end: new Date(reservation.endDate)
-            })
-
-            dates= [...dates,...range];
-        });
-        return dates;
-    },[reservation]);
+   
 
     const [isLoading,setIsLoading] = useState(false);
-    const [totalPrice,setTotalPrice] = useState(listing.price);
+    const [totalPrice,setTotalPrice] = useState(oportunidad.price);
     const [dateRange,setDateRange] = useState<Range>(initialDateRange);
 
     const onCreateReservation = useCallback(()=>{
         if(!currentUser){
-           
         }
         var data = {
             userId : currentUser?.id,
-            opportunityId : listing.id
+            opportunityId : oportunidad.id
         }
         console.log(data)
         setIsLoading(true);
 
         axios.post('/api/userXopportunity',data)
         .then(()=>{
-            toast.success('Reservation created');
+            toast.success('Aplicacion exitosa');
             
             //Redirect to /trips
             router.refresh();
@@ -87,28 +73,10 @@ const ListingClient: React.FC<ListingClientProps>  = ({
             setIsLoading(false);
         })
             
-    },[totalPrice,dateRange,currentUser,listing.id,currentUser]);
+    },[totalPrice,dateRange,currentUser,oportunidad.id,currentUser]);
 
-    useEffect(()=>{
-        if(dateRange.startDate && dateRange.endDate){
-            const dayCount = differenceInCalendarDays(dateRange.endDate,dateRange.startDate);
+   
 
-            if(dayCount && listing.price){
-                setTotalPrice(dayCount * listing.price);
-            }
-            else{
-                setTotalPrice(listing.price);
-            }
-
-        }
-    },[dateRange,listing.price]);
-
-
-    const category = useMemo(()=>{
-        return categories.find((item)=>{
-            item.label===listing.category;
-        },[listing.category]);
-    },[])
     return(
         <>
             <ToasterProvider/>
@@ -122,11 +90,11 @@ const ListingClient: React.FC<ListingClientProps>  = ({
                 pt-56
                 ">
                     <div className="flex flex-col gap-6">
-                        <ListingHead
-                            title={listing.title}
-                            ImageSrc = {listing.ImageSrc}
-                            locationValue={listing.locationValue}
-                            id={listing.id}
+                        <OpportunityHead
+                            title={oportunidad.name}
+                            ImageSrc = {oportunidad.imageUrl}
+                            
+                            id={oportunidad.id}
                             currentUser={currentUser}
                         />
                     </div>
@@ -139,15 +107,8 @@ const ListingClient: React.FC<ListingClientProps>  = ({
                             mt-6
                         "
                     >
-                        <ListingInfo
-                            user={listing.user}
-                            category = {category}
-                            description={listing.description}
-                            roomCount = {listing.roomCount}
-                            guestCount={listing.guestCount}
-                            bathroomCount={listing.bathroomCount}
-                            locationValue={listing.locationValue}
-
+                        <OpportunityInfo
+                            description={oportunidad.description}
                         />
                         <div
                             className="
@@ -158,14 +119,12 @@ const ListingClient: React.FC<ListingClientProps>  = ({
 
                             "
                         >
-                            <ListingReservation
-                                price={listing.price}
-                                totalPrice={totalPrice}
-                                onChangeDate = {(value)=>setDateRange(value)}
-                                dateRange={dateRange}
+                            <OpportunityApplication
+                                price={oportunidad.price}
+                              
                                 onSubmit={onCreateReservation}
                                 disabled = {isLoading}
-                                disabledDates={disabledDates}
+                               
                             />
                         </div>
                     </div>
@@ -176,4 +135,4 @@ const ListingClient: React.FC<ListingClientProps>  = ({
     )
 }
 
-export default ListingClient;
+export default OportunidadClient;

@@ -36,40 +36,56 @@ interface CompanyFormProps{
 
 
 const sectorOptions = [
-    { value: 'Soleado', label: 'Soleado' },
-    { value: 'Lluvioso', label: 'Lluvioso' },
-    { value: 'Nublado', label: 'Nublado' },
-    { value: 'Nevado', label: 'Nevado' },
-    { value: 'Ventoso', label: 'Ventoso' },
-    { value: 'Tormentoso', label: 'Tormentoso' },
-    { value: 'Húmedo', label: 'Húmedo' },
-    { value: 'Seco', label: 'Seco' },
-    { value: 'Frío', label: 'Frío' },
-    { value: 'Caluroso', label: 'Caluroso' },
+    { value: 'Tecnología', label: 'Tecnología' },
+    { value: 'Salud', label: 'Salud' },
+    { value: 'Finanzas', label: 'Finanzas' },
+    { value: 'Educación', label: 'Educación' },
+    { value: 'Manufactura', label: 'Manufactura' },
+    { value: 'Comercio', label: 'Comercio' },
+    { value: 'Transporte', label: 'Transporte' },
+    { value: 'Construcción', label: 'Construcción' },
+    { value: 'Agricultura', label: 'Agricultura' },
+    { value: 'Energía', label: 'Energía' },
+    { value: 'Turismo', label: 'Turismo' },
+    { value: 'Telecomunicaciones', label: 'Telecomunicaciones' },
+    { value: 'Alimentación', label: 'Alimentación' },
+    { value: 'Medios de Comunicación', label: 'Medios de Comunicación' },
+    { value: 'Servicios Profesionales', label: 'Servicios Profesionales' },
+    { value: 'Bienes Raíces', label: 'Bienes Raíces' },
+    { value: 'Automotriz', label: 'Automotriz' },
+    { value: 'Química', label: 'Química' },
+    { value: 'Textil', label: 'Textil' },
+    { value: 'Minería', label: 'Minería' },
 ];
 const identificationTypeOptions = [
-    { value: 'Soleado', label: 'Soleado' },
-    { value: 'Lluvioso', label: 'Lluvioso' },
-    { value: 'Nublado', label: 'Nublado' },
-    { value: 'Nevado', label: 'Nevado' },
-    { value: 'Ventoso', label: 'Ventoso' },
-    { value: 'Tormentoso', label: 'Tormentoso' },
-    { value: 'Húmedo', label: 'Húmedo' },
-    { value: 'Seco', label: 'Seco' },
-    { value: 'Frío', label: 'Frío' },
-    { value: 'Caluroso', label: 'Caluroso' },
+    { value: 'RUC', label: 'RUC' },
+    { value: 'NIT', label: 'NIT' },
+    { value: 'CIF', label: 'CIF' },
+    { value: 'RFC', label: 'RFC' },
+    { value: 'CUIT', label: 'CUIT' },
+    { value: 'NIF', label: 'NIF' },
+    { value: 'DNI', label: 'DNI' },
+    { value: 'CNPJ', label: 'CNPJ' },
+    { value: 'VAT', label: 'VAT' },
+    { value: 'INE', label: 'INE' },
 ];
 const companyTypeOptions = [
-    { value: 'Soleado', label: 'Soleado' },
-    { value: 'Lluvioso', label: 'Lluvioso' },
-    { value: 'Nublado', label: 'Nublado' },
-    { value: 'Nevado', label: 'Nevado' },
-    { value: 'Ventoso', label: 'Ventoso' },
-    { value: 'Tormentoso', label: 'Tormentoso' },
-    { value: 'Húmedo', label: 'Húmedo' },
-    { value: 'Seco', label: 'Seco' },
-    { value: 'Frío', label: 'Frío' },
-    { value: 'Caluroso', label: 'Caluroso' },
+    { value: 'Sociedad Anónima (SA)', label: 'Sociedad Anónima (SA)' },
+    { value: 'Sociedad de Responsabilidad Limitada (SRL)', label: 'Sociedad de Responsabilidad Limitada (SRL)' },
+    { value: 'Empresa Individual de Responsabilidad Limitada (EIRL)', label: 'Empresa Individual de Responsabilidad Limitada (EIRL)' },
+    { value: 'Sociedad Colectiva', label: 'Sociedad Colectiva' },
+    { value: 'Sociedad Comanditaria', label: 'Sociedad Comanditaria' },
+    { value: 'Cooperativa', label: 'Cooperativa' },
+    { value: 'Asociación Civil', label: 'Asociación Civil' },
+    { value: 'Fundación', label: 'Fundación' },
+    { value: 'Empresa Unipersonal', label: 'Empresa Unipersonal' },
+    { value: 'Microempresa', label: 'Microempresa' },
+    { value: 'Pequeña Empresa', label: 'Pequeña Empresa' },
+    { value: 'Mediana Empresa', label: 'Mediana Empresa' },
+    { value: 'Gran Empresa', label: 'Gran Empresa' },
+    { value: 'Empresa Pública', label: 'Empresa Pública' },
+    { value: 'Empresa Privada', label: 'Empresa Privada' },
+    { value: 'Empresa Mixta', label: 'Empresa Mixta' },
 ];
 
 const formSchema = z.object({
@@ -369,7 +385,7 @@ export const CompanyForm : React.FC<CompanyFormProps> = ({initialData}) => {
                             name="imageUrl"
                             render={({field})=>(
                                 <FormItem>
-                                    <FormLabel>Imagen de Bandera</FormLabel>
+                                    <FormLabel>Imagen de Empresa</FormLabel>
                                     <FormControl>
                                         <ImageUpload 
                                             value={field.value?[field.value]:[]}
