@@ -28,81 +28,19 @@ import { set } from "date-fns"
 
 enum STEPS {
     START = 0,
-    ENGLISH_LEVEL = 1,
-    ABILITIES = 2,
-    COUNTRIES = 3,
-    STUDIES = 4,
-    FAV_PROGRAM = 5,
-    DATE_TO_FLIGHT = 6,
-    FINISH = 7
+    QUESTION1 = 1,
+    QUESTION2 = 2,
+    QUESTION3 = 3,
+    QUESTION4 = 4,
+    QUESTION5 = 5,
+    QUESTION6 = 6,
+    QUESTION7 = 7,
+    QUESTION8 = 8,
+    QUESTION9 = 9,
+    FINISH = 10
 }
-const english_levels = [
-    {
-        label:'No lo he podido practicar',
-        icon: MdOutlineSignalWifi0Bar,
-        description:'This property is close to the beach!'
-    },
-    {
-        label:'Tengo un nivel básico',
-        icon: MdOutlineNetworkWifi2Bar,
-        description:'This property has windmills!'
-    },
-    {
-        label:'Tengo un nivel intermedio',
-        icon: MdOutlineNetworkWifi3Bar,
-        description:'This property is modern!'
-    },
-    {
-        label:'Tengo un nivel avanzado',
-        icon: MdOutlineSignalWifiStatusbar4Bar,
-        description:'This property is modern!'
-    },
 
 
-]
-const studyOptions = [
-    {
-        label:'Ingeniería Informática',
-        icon: MdOutlineSignalWifi0Bar,
-        description:'This property is close to the beach!'
-    },
-    {
-        label:'Ingeniería de Minas',
-        icon: MdOutlineNetworkWifi2Bar,
-        description:'This property has windmills!'
-    },
-    {
-        label:'Ingeniería Industrial',
-        icon: MdOutlineNetworkWifi3Bar,
-        description:'This property is modern!'
-    },
-    {
-        label:'Ingeniería Civil',
-        icon: MdOutlineSignalWifiStatusbar4Bar,
-        description:'This property is modern!'
-    },
-
-
-]
-const programOptions = [
-    {
-        label:'Talento Global (OGTa)',
-        icon: MdOutlineSignalWifi0Bar,
-        description:'This property is close to the beach!'
-    },
-    {
-        label:'Voluntariado Global (OGV)',
-        icon: MdOutlineNetworkWifi2Bar,
-        description:'This property has windmills!'
-    },
-    {
-        label:'Profesor Global (OGTe)',
-        icon: MdOutlineNetworkWifi3Bar,
-        description:'This property is modern!'
-    },
-
-
-]
 
 interface IngresoModalProps{
     FormFilled:boolean;
@@ -309,9 +247,9 @@ const IngresoModal:React.FC<IngresoModalProps> = ({
     let bodyContent = (
         <div className="flex flex-col gap-8"> 
             <Heading
-                title="¡Bienveni@ a la Comunidad!"
+                title="¡Queremos conocer tu experiencia!"
                 subtitle=
-                "Estamos encantados de que estés aquí. En nuestra plataforma, tu experiencia es nuestra prioridad. Para poder ofrecerte el mejor contenido y recursos, necesitamos conocerte un poco mejor mediante este formulario.¿Por qué es tan importante? Cada persona es única, y al llenar este formulario, nos ayudarás a entender tus intereses, necesidades y objetivos. Cuanta más información tengamos, más personalizada será tu experiencia. Queremos asegurarnos de que encuentres lo que realmente te inspire y motive."
+                "Gracias por ser parte de nuestro programa de pasantías/voluntariado en el extranjero. Tu opinión es muy valiosa para nosotros. Este formulario está diseñado para evaluar tu experiencia y recopilar tus impresiones, lo que nos ayudará a mejorar futuras oportunidades.Te agradecemos de antemano por tomarte el tiempo para compartir tus reflexiones y sugerencias. ¡Tu voz cuenta!"
             />
             <div className="
                 grid
@@ -326,7 +264,7 @@ const IngresoModal:React.FC<IngresoModalProps> = ({
         </div>
 
     )
-    if(step===STEPS.ENGLISH_LEVEL){
+    if(step===STEPS.QUESTION1){
         bodyContent = (
             <div className="flex flex-col gap-8"> 
                 <Heading
@@ -342,7 +280,7 @@ const IngresoModal:React.FC<IngresoModalProps> = ({
                     overflow-y-auto
     
                 ">
-                    {english_levels.map((item)=>(
+                    {/*english_levels.map((item)=>(
                         <div key={item.label} className="col-span-1">
                             <CategoryInput
                                 onClick ={(english_level)=>{setCustomValue('english_level',english_level)}}
@@ -352,14 +290,14 @@ const IngresoModal:React.FC<IngresoModalProps> = ({
                             
                             />
                         </div>
-                    ))}
+                    ))*/}
     
                 </div>
             </div>
     
         )
     }
-    if(step===STEPS.ABILITIES){
+    if(step===STEPS.QUESTION2){
         bodyContent=(
             <div className="flex flex-col gap-8">
                 <Heading
@@ -393,7 +331,7 @@ const IngresoModal:React.FC<IngresoModalProps> = ({
             </div>
         )
     }
-    if(step===STEPS.COUNTRIES){
+    if(step===STEPS.QUESTION3){
         bodyContent=(
             <div className="flex flex-col gap-8">
                 <Heading
@@ -427,7 +365,7 @@ const IngresoModal:React.FC<IngresoModalProps> = ({
             </div>
         )
     }
-    if(step ===STEPS.STUDIES){
+    if(step ===STEPS.QUESTION4){
         bodyContent = (
             <div className="flex flex-col gap-8"> 
                 <Heading
@@ -443,7 +381,7 @@ const IngresoModal:React.FC<IngresoModalProps> = ({
                     overflow-y-auto
     
                 ">
-                    {studyOptions.map((item)=>(
+                    {/*studyOptions.map((item)=>(
                         <div key={item.label} className="col-span-1">
                             <CategoryInput
                                 onClick ={(studies)=>{setCustomValue('studies',studies)}}
@@ -453,7 +391,7 @@ const IngresoModal:React.FC<IngresoModalProps> = ({
                             
                             />
                         </div>
-                    ))}
+                    ))*/}
     
                 </div>
             </div>
@@ -461,7 +399,7 @@ const IngresoModal:React.FC<IngresoModalProps> = ({
         )
     }
 
-    if(step===STEPS.FAV_PROGRAM){
+    if(step===STEPS.QUESTION5){
         bodyContent = (
             <div className="flex flex-col gap-8"> 
                 <Heading
@@ -477,7 +415,7 @@ const IngresoModal:React.FC<IngresoModalProps> = ({
                     overflow-y-auto
     
                 ">
-                    {programOptions.map((item)=>(
+                    {/*programOptions.map((item)=>(
                         <div key={item.label} className="col-span-1">
                             <CategoryInput
                                 onClick ={(fav_program)=>{setCustomValue('fav_program',fav_program)}}
@@ -487,14 +425,14 @@ const IngresoModal:React.FC<IngresoModalProps> = ({
                             
                             />
                         </div>
-                    ))}
+                    ))*/}
     
                 </div>
             </div>
     
         )
     }
-    if(step===STEPS.DATE_TO_FLIGHT){
+    if(step===STEPS.QUESTION6){
         bodyContent=(
             <div className="flex flex-col gap-8">
                 <Heading

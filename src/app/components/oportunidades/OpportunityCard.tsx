@@ -8,6 +8,8 @@ import {format} from 'date-fns'
 import Image from "next/image";
 import HeartButton from "../HeartButton";
 import Button from "../Button";
+import useFeedbackModal from "@/app/hooks/useFeedbackModal";
+import useRentModal from "@/app/hooks/useRentModal";
 
 interface OpportunityCardProps{
     data:Opportunity;
@@ -16,6 +18,7 @@ interface OpportunityCardProps{
     //disabled?: boolean;
     //actionLabel?:string;
     //actionId?:string;
+    boton:boolean;
     currentUser?:SafeUser | null;
 }
 
@@ -26,13 +29,20 @@ const OpportunityCard : React.FC<OpportunityCardProps> = ({
     //disabled,
     //actionLabel,
     //actionId ='',
+    boton,
     currentUser
 }) =>{
     const router = useRouter();
-    const {getByValue} = useCountries();
-    
-    return(
+    const {getByValue} = useCountries();    
+    const feedModal = useRentModal();
+
+    const onFeed = useCallback(()=>{
         
+        feedModal.onOpen();
+    },[currentUser,feedModal])
+
+    return(
+        <>
         <div
 
             onClick={()=>router.push(`/oportunidad/${data.id}`)}
@@ -104,18 +114,21 @@ const OpportunityCard : React.FC<OpportunityCardProps> = ({
                     {data.type_opportunity}
                     
                 </div>
-                {/*onAction && actionLabel &&(
-                    <Button
-                        disabled={disabled}
-                        small
-                        label={actionLabel}
-                        onClick={handleCancel}
-                    />
-                )*/}
+                
 
             </div>
             
         </div>
+
+        {boton &&(
+                    <Button
+                        disabled={false}
+                        small
+                        label={"Retroalimentacion"}
+                        onClick={onFeed}
+                    />
+                )}
+        </>
     )
 
 

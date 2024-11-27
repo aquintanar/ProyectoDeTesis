@@ -14,7 +14,7 @@ import OpportunityInfo from "@/app/components/oportunidades/OpportunityInfo";
 import useLoginModal from "@/app/hooks/useLoginModal";
 import ToasterProvider from "@/app/providers/ToasterProvider";
 import { SafeListings, safeReservation, SafeUser } from "@/app/types";
-import { Listing, Opportunity, Reservation } from "@prisma/client";
+import { Listing, Opportunity, Province, Reservation } from "@prisma/client";
 import axios from "axios";
 import { differenceInCalendarDays, differenceInDays, eachDayOfInterval } from "date-fns";
 import { useRouter } from "next/navigation";
@@ -33,13 +33,68 @@ const initialDateRange = {
 }
 
 
+
+interface Project {
+    id: string;
+    name: string;
+    ods: string;
+    description: string;
+    imageUrl: string;
+    status: string | null;
+}
+interface Company {
+    id: string;
+    name: string;
+    sector: string;
+    identification_type: string;
+    identification_number: string;
+    type_of_company: string;
+    description: string;
+    imageUrl: string;
+    webSite: string;
+    status: string | null;
+}
+interface City {
+    id: string;
+    name: string;
+    province_id: string;
+    description: string;
+    status: string | null;
+    imageUrl: string;
+
+}
+interface Opportunity2 {
+    id: string;
+    name: string;
+    type_opportunity: string;
+    proyect_id: string;
+    company_id: string;
+    city_id: string;
+    description: string;
+    start_date: string;
+    end_date: string;
+    start_time: string;
+    end_time: string;
+    acivities: string;
+    price: number;
+    payment: number;
+    english_level: string;
+    status: string | null;
+    imageUrl: string;
+    proyect: Project;
+    company: Company;
+    city: City;
+}
+
 interface OportunidadClientProps{
-    oportunidad: Opportunity
+    oportunidad: Opportunity2
     currentUser?: SafeUser | null;
+    status:String | null;
 }
 const OportunidadClient: React.FC<OportunidadClientProps>  = ({
     oportunidad,
-    currentUser
+    currentUser,
+    status
 }) =>{
     const router = useRouter();
 
@@ -48,7 +103,7 @@ const OportunidadClient: React.FC<OportunidadClientProps>  = ({
     const [isLoading,setIsLoading] = useState(false);
     const [totalPrice,setTotalPrice] = useState(oportunidad.price);
     const [dateRange,setDateRange] = useState<Range>(initialDateRange);
-
+    console.log(status)
     const onCreateReservation = useCallback(()=>{
         if(!currentUser){
         }
@@ -75,7 +130,7 @@ const OportunidadClient: React.FC<OportunidadClientProps>  = ({
             
     },[totalPrice,dateRange,currentUser,oportunidad.id,currentUser]);
 
-   
+    
 
     return(
         <>
@@ -93,7 +148,6 @@ const OportunidadClient: React.FC<OportunidadClientProps>  = ({
                         <OpportunityHead
                             title={oportunidad.name}
                             ImageSrc = {oportunidad.imageUrl}
-                            
                             id={oportunidad.id}
                             currentUser={currentUser}
                         />
@@ -108,7 +162,7 @@ const OportunidadClient: React.FC<OportunidadClientProps>  = ({
                         "
                     >
                         <OpportunityInfo
-                            description={oportunidad.description}
+                            oportunidad={oportunidad}
                         />
                         <div
                             className="
@@ -121,10 +175,10 @@ const OportunidadClient: React.FC<OportunidadClientProps>  = ({
                         >
                             <OpportunityApplication
                                 price={oportunidad.price}
-                              
                                 onSubmit={onCreateReservation}
                                 disabled = {isLoading}
-                               
+                               opportunity={oportunidad}
+                                status={status ? status : null}
                             />
                         </div>
                     </div>

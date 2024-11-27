@@ -65,6 +65,7 @@ const AplicacionesClient: React.FC<AplicacionesClientProps> = ({
                             key={aplicacion.opportunity.id}
                             data={aplicacion.opportunity}
                             currentUser={currentUser}
+                            boton={true}
                             
                         />
 

@@ -6,6 +6,7 @@ import getReservations from "@/app/actions/getReservations";
 import { SafeListings, SafeUser } from "@/app/types";
 import getOportunidadById from "@/app/actions/getOportunidadById";
 import OportunidadClient from "./OportunidadClient";
+import getStatusOportunidadXUser from "@/app/actions/getStatusOportunidadXUser";
 
 
 interface IParams {
@@ -14,10 +15,22 @@ interface IParams {
 }
 
 const OportunidadPage = async({params}:{params:IParams}) =>{
-    const oportunidad = await getOportunidadById(params) 
+    const oportunidad = await getOportunidadById(params);
     const currentUser = await getCurrentUser();
+    let status = null;
+    if (oportunidad && currentUser) {
+        status = await getStatusOportunidadXUser(oportunidad, currentUser);
+    }
 
+    if (oportunidad && oportunidad.proyect_id === null) {
+        oportunidad.proyect_id = '';
+    } else if (oportunidad && typeof oportunidad.proyect_id !== 'string') {
+        oportunidad.proyect_id = String(oportunidad.proyect_id);
+    }
     
+
+    console.log(status);
+
     
 
     
@@ -34,7 +47,7 @@ const OportunidadPage = async({params}:{params:IParams}) =>{
             
             <OportunidadClient
                 oportunidad={oportunidad}
-                
+                status={status ? status[0]?.status : null}
                 currentUser={currentUser}
             />
         </ClientOnly>

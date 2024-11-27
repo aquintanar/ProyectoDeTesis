@@ -3,77 +3,80 @@
 import { TbBeach, TbMountain, TbPool } from "react-icons/tb";
 import Container from "../Container";
 import { GiIsland, GiWindmill } from "react-icons/gi";
-import { MdOutlineVilla } from "react-icons/md";
+import { MdOutlineHealthAndSafety, MdOutlineSell, MdOutlineVilla } from "react-icons/md";
 import CategoryBox from "../CategoryBox";
 import { usePathname, useSearchParams } from "next/navigation";
-
+import { FaChalkboardTeacher, FaFootballBall, FaLanguage, FaLaptopCode, FaPaintBrush, FaRegMoneyBillAlt, FaTransgender } from "react-icons/fa";
+import { IoIosBusiness } from "react-icons/io";
+import { RiPlantFill } from "react-icons/ri";
+import { BiMath } from "react-icons/bi";
 export const categories = [
     {
         label:'Tecnologia',
-        icon: TbBeach,
+        icon: FaLaptopCode,
         description:'This property is close to the beach!'
     },
     {
         label:'Marketing',
-        icon: GiWindmill,
+        icon: MdOutlineSell,
         description:'This property has windmills!'
     },
     {
         label:'Finanzas',
-        icon: MdOutlineVilla,
+        icon: FaRegMoneyBillAlt,
         description:'This property is modern!'
     },
     {
         label:'Negocios',
-        icon: TbMountain,
+        icon: IoIosBusiness,
         description:'This property is modern!'
     }
     ,
     {
         label:'Educacion',
-        icon: TbPool,
+        icon:  FaChalkboardTeacher,
         description:'This property is modern!'
     }
     ,
     {
         label:'Salud',
-        icon: GiIsland,
+        icon: MdOutlineHealthAndSafety,
         description:'This property is modern!'
     }
     ,
     {
         label:'Igualdad',
-        icon: GiIsland,
+        icon: FaTransgender,
         description:'This property is modern!'
     }
     ,
     {
         label:'Ambiental',
-        icon: GiIsland,
+        icon: RiPlantFill,
         description:'This property is modern!'
     }
     ,
     {
         label:'Idiomas',
-        icon: GiIsland,
+        icon: FaLanguage,
         description:'This property is modern!'
     }
     ,
     {
         label:'Numeros',
-        icon: GiIsland,
+        icon: BiMath,
         description:'This property is modern!'
     }
     ,
     {
         label:'Arte',
-        icon: GiIsland,
+        icon: FaPaintBrush,
         description:'This property is modern!'
     }
     ,
     {
         label:'Deporte',
-        icon: GiIsland,
+        icon: FaFootballBall,
         description:'This property is modern!'
     }
     

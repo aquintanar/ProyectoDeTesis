@@ -67,7 +67,8 @@ export default async function Oportunidades(){
                         <OpportunityCard
                             currentUser={currentUser}
                             key={oportunidad.id} 
-                            data={oportunidad}                       
+                            data={oportunidad}
+                            boton={false}                       
                         />
 
                     )
@@ -78,7 +79,7 @@ export default async function Oportunidades(){
                 </div>
             </Container>
 
-            {listings.length ===0 && (
+            {oportunidades.length ===0 && (
 
                 <EmptyState showReset/>
 

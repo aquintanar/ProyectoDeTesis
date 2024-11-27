@@ -14,6 +14,20 @@ export default async function getOportunidadById(
     const oportunidad = await prisma.opportunity.findUnique({
         where:{
             id:oportunidadId
+        },
+        include:{
+          proyect:true,
+          company:true,
+          city:{
+            include:{
+              province:{
+                include:{
+                  country:true,
+                }
+              }
+            }
+          },
+          
         }
     });
     
